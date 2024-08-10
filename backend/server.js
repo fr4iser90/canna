@@ -2,23 +2,34 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import initializePem from "./scripts/initializePem.js";
+import initializeAndStartServer from "./scripts/initializeStartScript.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-import initializeAndStartServer from "./scripts/initializeStartScript.js";
+(async () => {
+  try {
+    await initializePem(); // Ensure PEM files are initialized first
 
-// Middleware configuration
-import middlewareConfig from "./config/middlewareConfig.js";
-middlewareConfig(app);
+    // Middleware configuration
+    const middlewareConfig = (await import("./config/middlewareConfig.js")).default;
+    middlewareConfig(app);
 
-// Routes configuration
-import routesConfig from "./config/routesConfig.js";
-routesConfig(app);
+    // Routes configuration
+    const routesConfig = (await import("./config/routesConfig.js")).default;
+    routesConfig(app);
 
-// Error Handling Middleware
-import errorHandler from "./middleware/errorHandler.js";
-app.use(errorHandler);
+    // Error Handling Middleware
+    const errorHandler = (await import("./middleware/errorHandler.js")).default;
+    app.use(errorHandler);
 
-initializeAndStartServer(app, PORT);
+    // Initialize and start the server
+    await initializeAndStartServer(app, PORT);
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+})();
 
 export default app;

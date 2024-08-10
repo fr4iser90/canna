@@ -2,18 +2,18 @@ import jwt from "jsonwebtoken";
 import { getConnection } from "../config/dbConnections.js";
 import createUserModel from "../models/User.js";
 import { isTokenBlacklisted } from "../utils/blacklist.js";
+import fs from 'fs';
 import path from "path";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url"; // Import fileURLToPath for handling URLs in ES Modules
+import { fileURLToPath } from "url";
 
-// Convert import.meta.url to file path using fileURLToPath
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-dotenv.config({
-  path: path.resolve(__dirname, "../../secrets/env/secrets.env"),
-});
+const publicKeyPath = path.resolve(__dirname, "../../secrets/keys/public.pem");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+// Load the public key
+const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 
 export async function authenticateToken(req, res, next) {
   let token;
@@ -23,23 +23,19 @@ export async function authenticateToken(req, res, next) {
     token = authHeader.split(" ")[1];
   } else if (req.cookies.authData) {
     const authData = JSON.parse(decodeURIComponent(req.cookies.authData));
-    token = authData ? authData.token : null;
+    token = authData ? authData.accessToken : null;
   }
 
   if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Access denied: No token provided" });
+    return res.status(401).json({ message: "Access denied: No token provided" });
   }
 
   if (await isTokenBlacklisted(token)) {
-    return res
-      .status(403)
-      .json({ message: "Access denied: Token is blacklisted" });
+    return res.status(403).json({ message: "Access denied: Token is blacklisted" });
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, publicKey, { algorithms: ["RS256"] });
 
     const dbConnection = await getConnection("userDb");
     const User = createUserModel(dbConnection);

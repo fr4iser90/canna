@@ -1,23 +1,34 @@
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const REFRESH_SECRET = process.env.REFRESH_SECRET;
+const privateKeyPath = path.resolve(__dirname, "../../secrets/keys/private.pem");
+const publicKeyPath = path.resolve(__dirname, "../../secrets/keys/public.pem");
 
-function generateTokens(user) {
-  const accessToken = jwt.sign(
-    { _id: user._id, username: user.username, role: user.role },
-    JWT_SECRET,
-    { expiresIn: "1h" },
+const privateKey = fs.readFileSync(privateKeyPath, "utf8");
+const publicKey = fs.readFileSync(publicKeyPath, "utf8");
+
+export const generateAccessToken = (user) => {
+  return jwt.sign(
+    { _id: user._id, username: user.username, roles: user.roles },
+    privateKey,
+    { algorithm: "RS256", expiresIn: "1h" }
   );
-  const refreshToken = jwt.sign(
-    { _id: user._id, username: user.username, role: user.role },
-    REFRESH_SECRET,
-    { expiresIn: "7d" },
-  ); // Longer expiration for refresh token
-  return { accessToken, refreshToken };
-}
+};
 
-export { generateTokens };
+export const generateRefreshToken = (user) => {
+  return jwt.sign(
+    { _id: user._id, username: user.username, roles: user.roles },
+    privateKey,
+    { algorithm: "RS256", expiresIn: "7d" }
+  );
+};
+
+export const verifyToken = (token) => {
+  return jwt.verify(token, publicKey, { algorithms: ["RS256"] });
+};

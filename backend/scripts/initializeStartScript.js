@@ -9,9 +9,12 @@ import ensureFriendship from "./initializeFriendship.js";
 import schedulePhaseUpdates from '../services/phaseUpdates.js';
 import { generateLogMessage } from './logMessage.js';
 import { initializeUserRoles } from './initializeUserRoles.js';
+import initializePem from './initializePem.js';
 
 const initializeAndStartServer = async (app, PORT) => {
   try {
+    // Initialize pems
+    await initializePem();
     // Initialize database users
     await initializeDatabaseUsers(); // Call to initialize users in MongoDB
     console.log("Database users initialized.");

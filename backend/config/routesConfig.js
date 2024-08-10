@@ -13,7 +13,8 @@ import testRoutes from "../routes/test.js";
 import ownPlantsRoutes from "../routes/ownPlants.js";
 import profileRoutes from "../routes/profile.js";
 import adminRoutes from "../routes/admin.js";
-import roleRoutes from "../routes/role.js"
+import roleRoutes from "../routes/role.js";
+import tokenRoutes from "../routes/token.js";
 
 export default (app) => {
   // View and upload routes
@@ -23,6 +24,7 @@ export default (app) => {
   // User-related routes
   const userDbConnection = attachDbConnection("userDb");
   app.use("/api/auth", userDbConnection, authRoutes);
+  app.use("/api/token", userDbConnection, tokenRoutes);
   app.use("/api/users", userDbConnection, userRoutes);
   app.use("/api/friends", userDbConnection, friendsRoutes);
   app.use("/api/preferences", userDbConnection, preferencesRoutes);
@@ -35,12 +37,7 @@ export default (app) => {
 
   // Strain-related routes
   const strainDbConnection = attachDbConnection("strainDb");
-  app.use(
-    "/api/templatePlantDatabase",
-    strainDbConnection,
-    templatePlantDatabase,
-  );
-  
+  app.use("/api/templatePlantDatabase", strainDbConnection, templatePlantDatabase);
   app.use("/api/randomPlants", strainDbConnection, testRoutes);
 
   // Own plants routes
@@ -53,12 +50,5 @@ export default (app) => {
   // Admin-related routes
   const adminDbConnection = attachDbConnection("adminDb");
   app.use("/api/databases", adminDbConnection, adminRoutes);
-  app.use(
-    "/api/admin",
-    adminDbConnection,
-    (req, res, next) => {
-      roleMiddleware(adminDbConnection, ["admin"])(req, res, next);
-    },
-    adminRoutes,
-  );
+  app.use("/api/admin", adminDbConnection, (req, res, next) => { roleMiddleware(adminDbConnection, ["admin"])(req, res, next); }, adminRoutes);
 };

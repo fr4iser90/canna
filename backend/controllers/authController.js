@@ -1,18 +1,12 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { getConnection } from "../config/dbConnections.js";
 import createUserModel from "../models/User.js";
 import createRoleModel from "../models/Role.js";
-import { addTokenToBlacklist } from "../utils/blacklist.js";
-import { generateTokens } from "../utils/tokenUtils.js";
-import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import path from "path";
+import * as tokenController from "./tokenController.js";
 
 dotenv.config({ path: path.resolve("../../secrets/env/secrets.env") });
-
-const JWT_SECRET = process.env.JWT_SECRET;
-const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
 // Register a new user
 export const register = async (req, res) => {
@@ -22,6 +16,7 @@ export const register = async (req, res) => {
     const dbConnection = await getConnection("userDb");
     const User = createUserModel(dbConnection);
     const Role = createRoleModel(dbConnection);
+    
 
     // Check if there are any users already registered
     const existingUserCount = await User.countDocuments();
@@ -74,6 +69,7 @@ export const register = async (req, res) => {
 // Login a user
 export const login = async (req, res) => {
   const { username, password } = req.body;
+
   try {
     const dbConnection = await getConnection("userDb");
     const User = createUserModel(dbConnection);
@@ -88,19 +84,21 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    const tokens = generateTokens(user);
+    const accessToken = tokenController.generateAccessToken(user);
+    const refreshToken = tokenController.generateRefreshToken(user);
 
     const authData = {
-      token: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
+      accessToken,
+      refreshToken,
       userId: user._id.toString(),
-      role: user.role,
+      role: user.roles,
     };
+
     res.cookie("authData", JSON.stringify(authData), {
       httpOnly: true,
       secure: true,
-      maxAge: 7200000,
-    }); // 1 hour
+      maxAge: 7200000, // 2 hours
+    });
 
     res.json({ message: "Login successful", ...authData });
   } catch (err) {
@@ -109,143 +107,24 @@ export const login = async (req, res) => {
   }
 };
 
+
 // Logout a user
 export const logout = async (req, res) => {
+  const authData = req.cookies.authData
+    ? JSON.parse(decodeURIComponent(req.cookies.authData))
+    : null;
+  const token = authData ? authData.accessToken : null;
+
+  if (!token) {
+    return res.status(401).send({ message: "No token provided" });
+  }
+
   try {
-    const authData = req.cookies.authData
-      ? JSON.parse(decodeURIComponent(req.cookies.authData))
-      : null;
-    const token = authData ? authData.token : null;
-
-    if (!token) {
-      return res.status(401).send({ message: "No token provided" });
-    }
-
-    const decoded = jwt.decode(token);
-    const expiresIn = decoded.exp - Math.floor(Date.now() / 1000); // Token lifespan in seconds
-    await addTokenToBlacklist(token, expiresIn);
+    await tokenController.blacklistToken(token);
     res.clearCookie("authData"); // Clear the cookie
     res.status(200).send({ message: "Logged out successfully" });
   } catch (err) {
     console.error("Error logging out:", err);
     res.status(500).send({ message: "Error logging out", error: err.message });
   }
-};
-
-// Refresh token
-export const refreshToken = (req, res) => {
-  const authData = req.cookies.authData
-    ? JSON.parse(decodeURIComponent(req.cookies.authData))
-    : null;
-  const refreshToken = authData ? authData.refreshToken : null;
-
-  if (!refreshToken) {
-    return res.status(401).send({ message: "No refresh token provided" });
-  }
-
-  jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).send({ message: "Invalid refresh token" });
-    }
-
-    const newTokens = generateTokens(user);
-    authData.token = newTokens.accessToken;
-    authData.refreshToken = newTokens.refreshToken;
-    res.cookie("authData", JSON.stringify(authData), {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    }); // Set the new tokens as a cookie
-    res.json({ token: newTokens.accessToken });
-  });
-};
-
-const verifyTokenLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again later.",
-});
-
-export const verifyToken = (req, res) => {
-  let token;
-  const authHeader = req.headers["authorization"];
-
-  if (authHeader) {
-    token = authHeader.split(" ")[1];
-  } else if (req.cookies.authData) {
-    const authData = JSON.parse(decodeURIComponent(req.cookies.authData));
-    token = authData ? authData.token : null;
-  }
-
-  if (!token) {
-    console.log("No token provided");
-    return res.status(401).send({ valid: false });
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      console.log("Token verification failed:", err.message);
-
-      let authData;
-      if (req.cookies.authData) {
-        authData = JSON.parse(decodeURIComponent(req.cookies.authData));
-      }
-      const refreshToken = authData ? authData.refreshToken : null;
-
-      if (refreshToken) {
-        jwt.verify(refreshToken, REFRESH_SECRET, (refreshErr, refreshUser) => {
-          if (refreshErr) {
-            console.log(
-              "Refresh token verification failed:",
-              refreshErr.message,
-            );
-            return res.status(403).send({ valid: false });
-          }
-
-          const newTokens = generateTokens(refreshUser);
-          authData.token = newTokens.accessToken;
-          authData.refreshToken = newTokens.refreshToken;
-          res.cookie("authData", JSON.stringify(authData), {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-          });
-          return res.send({
-            valid: true,
-            newToken: newTokens.accessToken,
-            role: refreshUser.role,
-          });
-        });
-      } else {
-        return res.status(403).send({ valid: false });
-      }
-    } else {
-      const newToken = jwt.sign(
-        { username: user.username, role: user.role },
-        JWT_SECRET,
-        { expiresIn: "1h" },
-      );
-
-      let authData;
-      if (req.cookies.authData) {
-        authData = JSON.parse(decodeURIComponent(req.cookies.authData));
-        authData.token = newToken;
-        res.cookie("authData", JSON.stringify(authData), {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-        });
-      } else {
-        authData = { token: newToken, role: user.role };
-        res.cookie("authData", JSON.stringify(authData), {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-        });
-      }
-
-      console.log("Token verified successfully");
-      res.send({ valid: true, newToken, role: user.role });
-    }
-  });
 };
