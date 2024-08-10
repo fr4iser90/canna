@@ -1,0 +1,17 @@
+<form id="recordForm">
+    <h2>Add Record for <%= plantId %> on <%= recordDate %></h2>
+    <label for="recordType">Record Type:</label>
+    <select id="recordType">
+        <option value="height">Height</option>
+        <option value="width">Width</option>
+        <option value="water">Water</option>
+        <option value="nutrient">Nutrient</option>
+        <option value="rootDevelopment">Root Development</option>
+        <option value="image">Image</option>
+    </select>
+    <div id="recordFormContent"></div>
+    <button id="saveRecordButton">Save</button>
+    <button id="cancelRecordButton">Cancel</button>
+</form>
+
+<script src="/sites/scripts/main/recordPopupMain.js" defer type="module"></script>

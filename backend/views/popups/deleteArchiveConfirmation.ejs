@@ -1,0 +1,45 @@
+<h2>Delete or Archive Plant</h2>
+
+<!-- Archive Form -->
+<form id="archiveForm">
+  <p>You can choose to archive the plant.</p>
+  <label for="archiveReason">Select the reason for archiving:</label><br>
+  <input type="radio" id="diseases" name="archiveReason" value="diseases">
+  <label for="diseases">Died to Diseases</label><br>
+  <input type="radio" id="malnutrition" name="archiveReason" value="malnutrition">
+  <label for="malnutrition">Malnutrition</label><br>
+  <input type="radio" id="harvestedEarly" name="archiveReason" value="harvestedEarly">
+  <label for="harvestedEarly">Harvested Early</label><br>
+  <div id="diseaseOptions" class="hidden">
+    <label for="diseaseType">Select Disease:</label>
+    <select id="diseaseType" name="diseaseType">
+      <option value="Powdery Mildew">Powdery Mildew</option>
+      <option value="Bud Rot">Bud Rot</option>
+    </select>
+  </div>
+  <div id="malnutritionOptions" class="hidden">
+    <label for="malnutritionType">Select Malnutrition Type:</label>
+    <select id="malnutritionType" name="malnutritionType">
+      <option value="Over Fertilization">Over Fertilization</option>
+      <option value="Under Fertilization">Under Fertilization</option>
+    </select>
+  </div>
+  <label for="archiveYield">Yield (if applicable):</label>
+  <input type="number" id="archiveYield" name="archiveYield">
+  <label for="additionalNotes">Additional Notes:</label>
+  <textarea id="additionalNotes" name="additionalNotes"></textarea>
+  <button type="button" id="confirmArchiveButton">Archive Plant</button>
+</form>
+
+<!-- Delete Form -->
+<form id="deleteForm" class="hidden">
+  <p>Are you sure you want to delete the plant <span id="plantNameDisplay"></span> with Age: <span id="plantAgeDisplay"></span> and all associated data?</p>
+  <label for="confirmDeleteName">Type the plant name to confirm deletion:</label>
+  <input type="text" id="confirmDeleteName" name="confirmDeleteName">
+  <button type="button" id="confirmDeleteButton">Delete Plant</button>
+</form>
+
+<button type="button" id="cancelButton">Cancel</button>
+<button type="button" id="switchToDeleteFormButton">Delete Plant</button>
+
+<script src="/sites/scripts/main/deleteArchiveConfirmationPopupMain.js" defer type="module" nonce="<%= nonce %>"></script>

@@ -1,0 +1,50 @@
+<div id="plantPopup" class="popup-container">
+    <div class="popup-content">
+        <span class="closeBtn">&times;</span>
+        <h2>Add Plant Phase Details</h2>
+        <form id="plantForm">
+            <label for="plantType">Plant Type:</label>
+            <select id="plantType" name="plantType">
+                <option value="seed">Seed</option>
+                <option value="cutting">Cutting</option>
+            </select>
+            <br>
+            <label id="sproutedLabel" for="startDate">Sprouted Date:</label>
+            <input type="date" id="startDate" name="startDate" required>
+            <br>
+            <fieldset id="phaseDurations">
+                <legend>Phase Durations (in days):</legend>
+                <label id="germinationLabel" for="germinationPhase">Germination:</label>
+                <input type="number" id="germinationPhase" name="germinationPhase">
+                <br>
+                <label id="rootingLabel" for="rootingPhase">Rooting:</label>
+                <input type="number" id="rootingPhase" name="rootingPhase">
+                <br>
+                <label id="seedlingLabel" for="seedlingPhase">Seedling:</label>
+                <input type="number" id="seedlingPhase" name="seedlingPhase">
+                <br>
+                <label id="vegetationLabel" for="vegetationPhase">Vegetation:</label>
+                <input type="number" id="vegetationPhase" name="vegetationPhase">
+                <br>
+                <label id="bloomLabel" for="bloomPhase">Bloom:</label>
+                <input type="number" id="bloomPhase" name="bloomPhase">
+            </fieldset>
+            <br>
+            <button type="button" id="savePlantButton">Save</button>
+            <button type="button" id="cancelPlantButton">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button" id="closeConfirmationModal">&times;</span>
+        <h2>Confirm Change</h2>
+        <p>Are you sure you want to change the plant type from <span id="currentType"></span> to <span id="newType"></span>? This will alter the phase and event calculation.</p>
+        <button id="confirmChangeButton">Confirm</button>
+        <button id="cancelChangeButton">Cancel</button>
+    </div>
+</div>
+
+<script src="/sites/scripts/main/plantPopupMain.js" defer type="module"></script>

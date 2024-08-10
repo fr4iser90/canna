@@ -1,0 +1,202 @@
+/* CSS for the popup */
+.popup-container, .popup-overlay {
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+/* General Popup Content Styling */
+.popup-content {
+    background-color: #e8f5e9;
+    padding: 20px;
+    border: 1px solid #4caf50;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    max-height: 90vh;
+    width: 90%;
+    max-width: 800px;
+    overflow-y: auto;
+    position: relative;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Close Button Styling */
+.closeBtn {
+    color: #333;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.closeBtn:hover,
+.closeBtn:focus {
+    color: #4caf50;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Header and Body Styling */
+.popup-header {
+    margin-bottom: 20px;
+}
+
+.popup-body {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Sidebar Styling */
+.popup-sidebar {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.popup-sidebar button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 100%;
+}
+
+.popup-sidebar button:hover {
+    background-color: #66bb6a;
+}
+
+.popup-sidebar button:active {
+    transform: scale(0.98);
+}
+
+/* Main Content Styling */
+.popup-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-form label,
+.popup-content label {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+.popup-form input[type="text"],
+.popup-form input[type="date"],
+.popup-form input[type="number"],
+.popup-form select,
+.popup-content input[type="text"],
+.popup-content input[type="number"],
+.popup-content select,
+.popup-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.popup-form button,
+.popup-content button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 20px;
+    align-self: flex-start;
+}
+
+.popup-form button:hover,
+.popup-content button:hover {
+    background-color: #66bb6a;
+}
+
+.popup-form button:active,
+.popup-content button:active {
+    transform: scale(0.98);
+}
+
+/* Conditional Display Elements */
+.hidden {
+    display: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .popup-content {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .popup-sidebar {
+        margin-bottom: 20px;
+    }
+
+    .popup-main {
+        width: 100%;
+    }
+
+    .closeBtn {
+        font-size: 24px;
+    }
+
+    .popup-form input[type="text"],
+    .popup-form input[type="date"],
+    .popup-form input[type="number"],
+    .popup-form select,
+    .popup-content input[type="text"],
+    .popup-content input[type="number"],
+    .popup-content select,
+    .popup-content textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .popup-form button,
+    .popup-content button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-height: 600px) {
+    .popup-content {
+        max-height: 80vh;
+    }
+
+    .popup-content label,
+    .popup-content input,
+    .popup-content select,
+    .popup-content button,
+    .popup-content textarea {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .closeBtn {
+        font-size: 20px;
+    }
+}

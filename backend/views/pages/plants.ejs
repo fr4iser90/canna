@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Management</title>
+    <link rel="stylesheet" href="/sites/styles/ownPlantsSite.css">
+    <script src="/sites/scripts/main/plantsMain.js" defer type="module"></script>
+</head>
+<body>
+    <div class="container">
+        <%- include('../partials/sidePanel') %>
+        <div class="plantcontent-container">
+            <div class="ownplantssite-plantcontainer">
+                <div class="plant-header">
+                    <label class="switch">
+                        <input type="checkbox" id="loadArchivedPlants">
+                        <span class="slider round"></span>
+                    </label>
+                    <label for="loadArchivedPlants">Load Archived Plants</label>
+                </div>
+                <div class="basic-info">
+                    <h2 class="plant-name">Select a plant to view details</h2>
+                    <h3>Basic Information</h3>
+                    <p>Name: <span class="name">N/A</span></p>
+                    <p>Genetics: <span class="genetics">N/A</span></p>
+                    <p>THC: <span class="thc">N/A</span></p>
+                    <p>CBD: <span class="cbd">N/A</span></p>
+                    <p>Growth Method: <span class="growth-method">N/A</span></p>
+                    <p>Flowering Type: <span class="flowering-type">N/A</span></p>
+                    <p>Flowering Time: <span class="flowering-time">N/A</span></p>
+                    <p>Growth Environment: <span class="growth-environment">N/A</span></p>
+                    <p>Substrate: <span class="substrate">N/A</span></p>
+                    <p>Fertilizer: <span class="fertilizer">N/A</span></p>
+                    <p>Seed Type: <span class="seed-type">N/A</span></p>
+                    <p>Plant Phase: <span class="plant-phase">N/A</span></p>
+                    <p>Start Date: <span class="start-date">N/A</span></p>
+                    <p>Crowns: <span class="crowns">N/A</span></p>
+                    <p>Biggest Bud in Gram: <span class="biggest-bud">N/A</span></p>
+                    <p>Harvest Yield: <span class="harvest-yield">N/A</span></p>
+                    <div class="records">
+                        <button class="show-records" onclick="toggleVisibility('.records-frame')">Show Records</button>
+                    </div>
+                    <div class="images">
+                        <button class="show-images" onclick="toggleVisibility('.images-frame')">Show Images</button>
+                    </div>
+                    <div class="manage-plant">
+                        <button class="manage-plant-button" onclick="openManagePlantPopup()">Manage Plant</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../partials/rightSidebar') %>
+    </div>
+
+    <!-- Edit Plant Modal -->
+    <div class="modal" id="editPlantModal">
+        <div class="modal-content">
+            <span class="close-button" onclick="document.getElementById('editPlantModal').style.display='none'">&times;</span>
+            <h2>Edit Plant</h2>
+            <!-- Edit plant form goes here -->
+        </div>
+    </div>
+
+    <!-- Delete Plant Modal -->
+    <div class="modal" id="deletePlantModal">
+        <div class="modal-content">
+            <span class="close-button" onclick="document.getElementById('deletePlantModal').style.display='none'">&times;</span>
+            <h2>Delete Plant</h2>
+            <p>Are you sure you want to delete this plant?</p>
+            <button class="confirm-delete">Yes</button>
+            <button class="cancel-delete" onclick="document.getElementById('deletePlantModal').style.display='none'">No</button>
+        </div>
+    </div>
+</body>
+</html>

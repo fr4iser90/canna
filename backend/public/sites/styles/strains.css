@@ -1,0 +1,151 @@
+/* General page layout */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 45px;
+    padding: 0;
+    height: calc(100vh - 60px); /* Adjust this value based on the height of your header */
+    overflow: hidden;
+}
+
+.strain-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em; /* Reduced padding */
+    height: 95%;
+    overflow: hidden;
+}
+
+.ownPlants-list, .DatabasePlants-list {
+    flex: 1;
+    margin: 0.5em;
+    border-radius: 10px;
+    padding: 0.3em;
+    background-color: #f1f8e9; /* Default background for both containers */
+    position: relative; /* Required for the close button */
+    transition: flex-grow 0.3s ease-in-out, max-height 0.3s ease-in-out; /* Transition for expansion */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent scrolling of the whole container */
+}
+
+/* Header for each container */
+.ownPlants-list h2, .DatabasePlants-list h2 {
+    margin: 0;
+    padding: 0.3em 0;
+    text-align: center;
+    background-color: #4caf50; /* Green background for the header */
+    color: white; /* White text for contrast */
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.list-container {
+    flex-grow: 1; /* Make sure it grows to fill available space */
+    min-height: 100px; /* Ensure the list has a minimum height */
+    border: 2px dashed #81c784;
+    overflow-y: auto; /* Allow vertical scrolling within the list */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch; /* Ensure all items stretch to fill container width */
+    padding: 10px;
+}
+
+/* Styling the search input */
+#searchInputPlants, #searchInputStrains {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 0.5em; /* Reduced margin */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Plant item styling */
+div.plant, div.strain {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    background-color: #f9f9f9;
+    flex: 0 0 auto; /* Ensure all plant and strain items are equal height */
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+div.plant:hover, div.strain:hover {
+    background-color: #f1f1f1;
+}
+
+/* Strain details styling */
+.strain-details {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Drop target visual feedback */
+.drop-target.drag-over {
+    border: 2px dashed #4caf50; /* Green dashed border */
+    background-color: #f0fff0; /* Light green background */
+}
+
+
+/* Media queries for responsiveness */
+@media (min-width: 768px) {
+    .strain-content {
+        flex-direction: row;
+    }
+
+    .ownPlants-list, .DatabasePlants-list {
+        flex: 1;
+    }
+
+    .ownPlants-list.collapsed, .DatabasePlants-list.collapsed {
+        max-height: 40px;
+        flex-grow: 0;
+        overflow: hidden;
+    }
+
+    .ownPlants-list.collapsed h2, .DatabasePlants-list.collapsed h2 {
+        cursor: pointer;
+    }
+}
+
+/* Loader styling */
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: none; /* Initially hidden */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Container to ensure relative positioning */
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}

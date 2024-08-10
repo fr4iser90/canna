@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/sites/styles/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/strains">Strain Definitions</a></li>
+                <li id="adminPanelLink"><a href="/admin">Admin Panel</a></li>
+                <li id="logoutLink" style="display: none;"><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="panel-container">
+            <div class="panel">
+                <h2>User Management</h2>
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select id="role" required>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit">Save</button>
+                        <button type="reset">Clear</button>
+                    </div>
+                    <div id="formFeedback" class="feedback"></div>
+                </form>
+            </div>
+            <div class="panel">
+                <h2>User List</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search users...">
+                </div>
+                <table id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamically generated user rows -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel">
+                <h2>Database Management</h2>
+                <div class="form-group">
+                    <label for="dbDropdown">Select Database:</label>
+                    <select id="dbDropdown"></select>
+                </div>
+                <div class="form-group">
+                    <label for="collectionDropdown">Select Collection:</label>
+                    <select id="collectionDropdown"></select>
+                </div>
+                <div class="form-actions">
+                    <button id="dropDatabaseButton">Drop Database</button>
+                    <button id="dropCollectionButton">Drop Collection</button>
+                </div>
+                <div id="dbFeedback" class="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/sites/scripts/pages/adminPage/main/adminMain.js"></script>
+</body>
+</html>

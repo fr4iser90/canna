@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="/sites/styles/calendar.css">
+    <link rel="stylesheet" href="/sites/styles/friends-slider.css">
+</head>
+<body>
+    <%- include('../partials/sidePanel') %>
+    <div class="content-container">
+        <div class="friends-slider">
+            <button id="my-calendar-button">My Calendar</button>
+            <div id="friends-container"></div>
+            <button id="search-friends-button">Manage Friends</button>
+        </div>
+        <div class="calendar-container">
+            <div id='calendar'></div>
+        </div>
+    </div>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.11.5/main.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/sites/scripts/main/calendarMain.js" defer nonce="<%= nonce %>"></script>
+</body>
+</html>

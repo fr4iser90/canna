@@ -1,0 +1,143 @@
+/* calendar.css */
+
+/* General layout adjustments */
+.main-content {
+    display: flex;
+    height: calc(100vh - 60px); /* Adjust height based on header size */
+    overflow: hidden; /* Prevent the whole page from scrolling */
+}
+
+.content-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #e8f5e9; /* Very light green for the container */
+}
+
+.calendar-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent the calendar container from scrolling */
+}
+
+#calendar {
+    width: 100%;
+    height: 100%;
+}
+
+#loading {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 20px;
+}
+
+/* Event styles */
+.fc-event {
+    background-color: #66bb6a; /* Medium green for event background */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    font-size: 14px; /* Default font size */
+}
+
+.fc-event.small-font {
+    font-size: 1px; /* Smaller font size for many events */
+}
+
+.fc-event:hover {
+    background-color: #4caf50; /* Darker green on hover */
+}
+
+.fc-event-title {
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fc-event-tooltip {
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.fc-highlight-today {
+    background-color: rgba(102, 187, 106, 0.2); /* Light green highlight for today */
+}
+
+.fc-day:hover {
+    background-color: #f1f8e9; /* Very light green on hover */
+    cursor: pointer;
+}
+
+.has-event {
+    background-color: #ffcc80; /* Highlight color */
+    border-radius: 50%; /* Rounded corners for better appearance */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Adds shadow for depth */
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .calendar-container {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 10px;
+    }
+
+    .fc-day {
+        padding: 2px;
+        font-size: 10px;
+    }
+
+    .fc-event {
+        font-size: 10px;
+        padding: 3px;
+    }
+
+    .fc-event-title {
+        font-size: 10px;
+    }
+
+    .fc-day-today {
+        background-color: #c8e6c9; /* Slightly darker green for better contrast on small screens */
+    }
+
+    .fc-day:hover {
+        background-color: #dcedc8; /* Adjust hover color for better visibility */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .fc-day {
+        padding: 1px;
+        font-size: 8px;
+    }
+
+    .fc-event {
+        font-size: 8px;
+        padding: 2px;
+    }
+
+    .fc-event-title {
+        font-size: 8px;
+    }
+
+    .fc-day-today {
+        background-color: #a5d6a7; /* Adjusted green for small screens */
+    }
+
+    .fc-day:hover {
+        background-color: #c5e1a5; /* Adjust hover color for small screens */
+    }
+}

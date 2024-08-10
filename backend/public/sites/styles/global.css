@@ -1,0 +1,65 @@
+/* global.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0fff0; /* Light green background for a natural look */
+    color: #333; /* Darker text color for better readability */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent body from scrolling */
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    color: #4caf50; /* Medium green for h1 */
+    text-shadow: 1px 1px 2px #000; /* Add a subtle shadow for depth */
+}
+
+h4 {
+    font-size: 18px;
+    border-bottom: 2px solid #81c784; /* Add a border below h4 */
+    padding-bottom: 5px;
+}
+
+button {
+    background-color: #4caf50; /* Medium green button background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+button:hover {
+    background-color: #66bb6a; /* Light green hover effect */
+}
+
+/* Ensure that the main content starts below the fixed header */
+.main-content {
+    margin-top: 60px; /* Adjust this value based on the height of your header */
+    background-color: #e8f5e9; /* Very light green background */
+    padding: 20px;
+    display: flex;
+    height: calc(100vh - 60px); /* Adjust height based on header size */
+    overflow: hidden; /* Prevent the whole page from scrolling */
+}
+
+.container {
+    display: flex;
+    flex-direction: row; /* Ensure side-panel and main-content are side by side */
+    height: 100vh; /* Ensure the container takes full viewport height */
+}
+
+.side-panel {
+    flex: 0 0 300px; /* Fixed width for side-panel */
+    background-color: #c8e6c9; /* Light green background for side-panel */
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        height: auto;
+    }
+}

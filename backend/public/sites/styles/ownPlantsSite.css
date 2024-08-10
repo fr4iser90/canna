@@ -1,0 +1,156 @@
+.container {
+    display: flex;
+    height: 100vh; /* Ensure the container takes full viewport height */
+    width: 100vw; /* Ensure the container takes full viewport width */
+}
+
+.plantcontent-container {
+    display: flex;
+    flex-direction: column; /* Ensure content is arranged in a column */
+    background-color: #e8f5e9; /* Light green background for better contrast */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Inner padding */
+    overflow-y: auto; /* Vertical scroll for overflow */
+    flex-grow: 1; /* Flexible growth within the main content */
+    height: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    margin-right: 250px; /* Make space for the right sidebar */
+}
+
+.ownplantssite-plantcontainer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.basic-info {
+    display: block; 
+    background-color: #ffffff; /* White background for better contrast */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    padding: 20px; /* Inner padding */
+    overflow-y: auto; /* Vertical scroll for overflow */
+    flex-grow: 1; /* Flexible growth within the parent container */
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    transition: opacity 0.3s ease; /* Smooth transition */
+    opacity: 0; /* Initially hidden */
+}
+
+.modal.show {
+    display: block; /* Show modal */
+    opacity: 1; /* Fully visible */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 250px; /* Fixed width for the sidebar */
+    padding: 10px;
+    background-color: #e8f5e9; /* Very light green for the sidebar */
+    position: absolute;
+    right: 0;
+}
+
+.frame {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    display: none; /* Initially hidden */
+}
+
+.frame.show {
+    display: block; /* Show frame when applicable */
+}
+
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Switch button styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Adjust modal content for smaller screens */
+@media screen and (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+    }
+}

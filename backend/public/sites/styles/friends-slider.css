@@ -1,0 +1,27 @@
+/* friends-slider.css */
+
+.friends-slider {
+    display: flex;
+    align-items: center;
+    background-color: #c8e6c9; /* Light green for friends panel */
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #81c784; /* Add a border to the bottom */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    white-space: nowrap; /* Prevent elements from wrapping */
+    overflow-y: hidden; /* Prevent vertical scrolling */
+}
+
+.friends-slider button, .friends-slider div {
+    display: inline-block;
+    margin-right: 10px;
+    background-color: #a5d6a7; /* Light green for button background */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners for a softer look */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
+    cursor: pointer;
+}
+
+.friends-slider button:hover, .friends-slider div:hover {
+    background-color: #81c784;
+}

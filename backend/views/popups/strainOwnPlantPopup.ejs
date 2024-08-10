@@ -1,0 +1,40 @@
+<div id="strainOwnPlantPopup" class="popup-container">
+    <div class="popup-content">
+        <span class="closeBtn">&times;</span>
+        <h2>Add Plant</h2>
+        <form>
+            <label>Name:</label>
+            <input type="text" id="plantName" value="<%= cleanedName %>" />
+            <label>Genetics:</label>
+            <input type="text" id="plantGenetics" value="<%= strainData.genetics %>" />
+            <label>THC:</label>
+            <input type="text" id="plantTHC" value="<%= strainData.thc %>" />
+            <label>CBD:</label>
+            <input type="text" id="plantCBD" value="<%= strainData.cbd %>" />
+            <label>Growth Method:</label>
+            <select id="growthMethod">
+                <option value="seed">Seed</option>
+                <option value="cutting">Cutting</option>
+            </select>
+            <label>Flowering Time:</label>
+            <select id="plantFloweringTime">
+                <option value="6" <%= floweringTime === '6' ? 'selected' : '' %>>6 Weeks</option>
+                <option value="7" <%= floweringTime === '7' ? 'selected' : '' %>>7 Weeks</option>
+                <option value="8" <%= floweringTime === '8' ? 'selected' : '' %>>8 Weeks</option>
+                <option value="9" <%= floweringTime === '9' ? 'selected' : '' %>>9 Weeks</option>
+                <option value="10" <%= floweringTime === '10' ? 'selected' : '' %>>10 Weeks</option>
+                <option value="11" <%= floweringTime === '11' ? 'selected' : '' %>>11 Weeks</option>
+                <option value="12" <%= floweringTime === '12' ? 'selected' : '' %>>12 Weeks</option>
+            </select>
+            <label>Is Mother Plant:</label>
+            <select id="isMotherPlant">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+            <button id="savePlantButton">Save</button>
+            <button id="cancelPlantButton">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script src="/sites/scripts/main/strainOwnPlantPopupMain.js" defer type="module"></script>

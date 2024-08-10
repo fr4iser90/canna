@@ -1,0 +1,124 @@
+/* side-panel.css */
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    width: 300px; /* Adjust width as needed */
+    background-color: #b4e0b6; /* Light green for side panel */
+    padding: 15px; /* Add some padding */
+    box-sizing: border-box;
+    border-right: 2px solid #81c784; /* Add a border to the right side */
+    height: 100vh; /* Full viewport height */
+    position: relative; /* For positioning the custom scrollbar */
+    overflow: hidden; /* Hide default scrollbar */
+    padding-bottom: 20px; /* Add padding to the bottom to make the end of the list clear */
+    border-bottom: 2px solid #81c784;
+}
+
+.side-panel h4 {
+    margin-top: 0;
+    color: #2e7d32; /* Dark green subheader color */
+    font-family: 'Courier New', Courier, monospace; /* Match header font */
+    letter-spacing: 1px; /* Space out letters */
+}
+
+#ownPlants-list {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden; /* Ensure it takes up available space and hides overflow */
+    height: 100%; /* Ensure it takes the full height of the parent container */
+}
+
+#OwnPlantslist-Container {
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+    -ms-overflow-style: none;  /* Hide scrollbar in Internet Explorer and Edge */
+    flex-grow: 1; /* Ensure it takes up available space */
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px; /* Add padding to the bottom to make the end of the list clear */
+    border-bottom: 2px solid #81c784; /* Space for the custom scrollbar */
+    height: 80%; /* Make the container take up 80% of the parent's height */
+    margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (min-height: 600px) {
+    #OwnPlantslist-Container {
+        max-height: calc(70% - 40px); /* Increase height for taller screens */
+        min-height: calc(20% - 40px); /* Increase minimum height for taller screens */
+    }
+}
+
+@media (min-height: 800px) {
+    #OwnPlantslist-Container {
+        max-height: calc(80% - 40px); /* Increase height for even taller screens */
+        min-height: calc(30% - 40px); /* Increase minimum height for even taller screens */
+    }
+}
+
+#OwnPlantslist-Container::-webkit-scrollbar {
+    width: 8px; /* Width of the custom scrollbar */
+}
+
+#OwnPlantslist-Container::-webkit-scrollbar-thumb {
+    background: #81c784; /* Color of the custom scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+#OwnPlantslist-Container::-webkit-scrollbar-thumb:hover {
+    background: #4caf50; /* Darker color on hover */
+}
+
+/* Smooth scrolling */
+#OwnPlantslist-Container {
+    scroll-behavior: smooth; /* Smooth scrolling for modern browsers */
+}
+
+.plant {
+    margin-bottom: 20px;
+    background-color: #73bd75; /* Light green for plant item background */
+    padding: 15px; /* More padding for a larger clickable area */
+    border-radius: 25px; /* More rounded corners for a bubble-like appearance */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.plant:hover {
+    background-color: #81c784; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.plant h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #2e7d32; /* Dark green for plant name */
+    text-align: center; /* Center align text */
+}
+
+.plant p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: #2e7d32; /* Dark green for plant details */
+    text-align: center; /* Center align text */
+}
+
+.more-info {
+    display: none; /* Initially hidden */
+}
+
+.plant.active .more-info {
+    display: block; /* Show more info when active */
+}
+
+/* Prevent text selection */
+.plant,
+.plant h3,
+.plant p {
+    user-select: none;
+}

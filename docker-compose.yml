@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  weedmongo:
+    image: mongo:4.4
+    container_name: weed-mongo
+    volumes:
+      - mongo-data:/data/db
+      - ./secrets/certs:/etc/ssl
+      - ./secrets/conf/mongod.conf:/etc/mongod.conf:ro 
+    command: --config /etc/mongod.conf
+    networks:
+      backend:
+        ipv4_address: 172.30.0.2
+    env_file:
+      - ./secrets/env/weedmongo.env
+    labels:
+      traefik.enable: "false"
+      com.centurylinklabs.watchtower.enable: "false"
+
+  weed-backend:
+    build: ./backend
+    container_name: weed-backend
+    env_file:
+      - ./secrets/env/secrets.env 
+      - ./secrets/env/weedmongo.env
+    depends_on:
+      - weedmongo
+    volumes:
+      - ./backend:/usr/src/app
+      - ./secrets/env:/usr/src/secrets/env
+      - ./secrets/certs/ca.pem:/usr/src/app/certs/ca.pem:ro
+      - ./secrets/certs/mongodb-combined.pem:/usr/src/app/certs/mongodb-combined.pem:ro
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 29101:29101
+    networks:
+      proxy:
+        ipv4_address: 172.40.0.99
+      backend:
+        ipv4_address: 172.30.0.3
+    labels:
+      traefik.docker.network: proxy
+      traefik.enable: "true"
+      traefik.http.routers.weedbackend-secure.entrypoints: websecure
+      traefik.http.routers.weedbackend-secure.middlewares: default@file
+      traefik.http.routers.weedbackend-secure.rule: Host(`weedbackend.fr4iserhome.com`)
+      traefik.http.routers.weedbackend-secure.service: "weedbackend"
+      traefik.http.routers.weedbackend-secure.tls: "true"
+      traefik.http.routers.weedbackend-secure.tls.certresolver: http_resolver
+      traefik.http.routers.weedbackend.rule: Host(`weedbackend.fr4iserhome.com`)
+      traefik.http.services.weedbackend.loadbalancer.server.port: "29101"
+      com.centurylinklabs.watchtower.enable: "false"
+
+  weed-frontend:
+    build: ./frontend
+    container_name: weed-frontend
+    volumes:
+      - ./backend/public:/etc/nginx/html
+      - ./secrets/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./secrets/conf/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - weed-backend
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    networks:
+      proxy:
+      backend: 
+        ipv4_address: 172.30.0.4
+    labels:
+      traefik.docker.network: proxy
+      traefik.enable: "true"
+      traefik.http.routers.weed-secure.entrypoints: websecure
+      traefik.http.routers.weed-secure.middlewares: default@file
+      traefik.http.routers.weed-secure.rule: Host(`weed.fr4iserhome.com`)
+      traefik.http.routers.weed-secure.service: "weed"
+      traefik.http.routers.weed-secure.tls: "true"
+      traefik.http.routers.weed-secure.tls.certresolver: http_resolver
+      traefik.http.routers.weed.entrypoints: web
+      traefik.http.routers.weed.rule: Host(`weed.fr4iserhome.com`)
+      traefik.http.services.weed.loadbalancer.server.port: "80"
+      com.centurylinklabs.watchtower.enable: "false"
+
+networks:
+  proxy:
+    external: true
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+volumes:
+  mongo-data:
+    name: weed-mongo-data

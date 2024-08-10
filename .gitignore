@@ -1,0 +1,15 @@
+# Umgebungsvariablen
+.env
+
+# Node modules
+node_modules/
+
+# Log Dateien
+logs/
+*.log
+
+# Secrets Ordner
+secrets/
+
+# Sonstige sensible Dateien
+config.js

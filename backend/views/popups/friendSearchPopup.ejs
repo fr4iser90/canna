@@ -1,0 +1,35 @@
+<div id="friend-search-popup" class="popup-container">
+    <div class="popup-content">
+      <span class="close">&times;</span>
+      <h2>Friend Management</h2>
+      
+      <!-- Search Friends Section -->
+      <div id="search-friends-section">
+        <h3>Search and Invite Friends</h3>
+        <input type="text" id="friend-search-input" placeholder="Enter name or email">
+        <button id="invite-friend-button">Search</button>
+        <div id="search-results"></div>
+      </div>
+      
+      <!-- Friend Requests Section -->
+      <div id="friend-requests-section">
+        <h3>Pending Friend Requests</h3>
+        <div id="friend-requests-results"></div>
+      </div>
+      
+      <!-- Friends List Section -->
+      <div id="friends-list-section">
+        <h3>My Friends</h3>
+        <div id="friends-list-results"></div>
+      </div>
+      
+      <!-- Blocked Users Section -->
+      <div id="blocked-users-section">
+        <h3>Blocked Users</h3>
+        <div id="blocked-users-results"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/sites/scripts/main/friendSearchPopupMain.js" defer type="module" nonce="<%= nonce %>"></script>
+  

@@ -1,0 +1,61 @@
+/* navigation.css */
+header {
+    background-color: #2e7d32; /* Dark green header */
+    padding: 10px 0; /* Reduce padding to minimize gap */
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 2px -2px gray; /* Adds a shadow below the header for depth */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 60px; /* Define the height of the header */
+}
+
+header h1 {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace; /* Adds a different font for the title */
+    letter-spacing: 2px; /* Space out the letters for a unique look */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    height: 100%; /* Ensure ul takes full height of the header */
+    align-items: center; /* Vertically center the nav items */
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 15px; /* Space out the nav items more */
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold; /* Make nav links bold */
+    transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+nav ul li a:hover {
+    color: #a5d6a7; /* Light green hover effect */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
+    }
+}
