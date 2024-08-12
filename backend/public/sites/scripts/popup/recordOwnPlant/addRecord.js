@@ -1,8 +1,6 @@
-import { configURL } from "../../global.js";
-
 export async function addRecord(plantId, recordType, recordData) {
-  const response = await fetch(
-    `${configURL.API_BASE_URL}/api/ownPlants/${plantId}/${recordType}`,
+  const response = await fetchWithCookies(
+    `/api/ownPlants/${plantId}/${recordType}`,
     {
       method: "POST",
       headers: {

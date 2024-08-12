@@ -1,5 +1,3 @@
-import { configURL } from "../../../global.js";
-
 export async function initializeChangePassword() {
   const changePasswordForm = document.getElementById("changePasswordForm");
 
@@ -11,7 +9,7 @@ export async function initializeChangePassword() {
       const newPassword = formData.get("newPassword");
 
       try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/users/changePassword`, {
+        const response = await fetchWithCookies(`/api/users/changePassword`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

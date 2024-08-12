@@ -1,12 +1,11 @@
-import { configURL } from "../global.js";
-
 async function fetchUsers(userTable, dbFeedback) {
   try {
-    let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users`, {
+    let response = await fetch(`/api/admin/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
     });
     let data = await response.json();
     if (response.ok) {
@@ -40,12 +39,13 @@ async function editUser(user, userTable) {
   if (newUsername) {
     user.username = newUsername;
     try {
-      let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users/${user._id}`, {
+      let response = await fetch(`/api/admin/users/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
+        credentials: 'include',
       });
       if (response.ok) {
         let row = userTable.querySelector(`[data-id="${user._id}"]`);
@@ -63,7 +63,7 @@ async function editUser(user, userTable) {
 async function deleteUser(id, row) {
   if (confirm("Are you sure you want to delete this user?")) {
     try {
-      let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users/${id}`, {
+      let response = await fetchWithCookies(`/api/admin/users/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

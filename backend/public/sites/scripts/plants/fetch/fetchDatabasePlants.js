@@ -1,11 +1,10 @@
 export async function fetchDatabasePlants() {
   try {
-    const response = await fetch(`/api/templatePlantDatabase`,{
+    const response = await fetchWithCookies(`/api/templatePlantDatabase`,{
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include"
       }
     );
 

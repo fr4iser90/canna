@@ -61,7 +61,7 @@ export function searchFriendsButton() {
   const searchFriendsButton = document.getElementById("search-friends-button");
   if (searchFriendsButton) {
     searchFriendsButton.addEventListener("click", () => {
-      fetch('/popup/friendSearchPopup')  // fetchWithAuth wurde durch fetch ersetzt, da die Authentifizierung im Backend erfolgt.
+      fetchWithCookies('/popup/friendSearchPopup')  
         .then(response => response.text())
         .then(html => {
           document.body.insertAdjacentHTML('beforeend', html);

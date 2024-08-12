@@ -1,10 +1,9 @@
-import { configURL } from "../global.js";
 import { displayFriendRequests } from "./displayFriendRequests.js";
 
 export async function loadFriendRequests() {
   try {
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/friends/requests`,
+    const response = await fetchWithCookies(
+      `/api/friends/requests`,
       {
         headers: {
           'Content-Type': 'application/json',

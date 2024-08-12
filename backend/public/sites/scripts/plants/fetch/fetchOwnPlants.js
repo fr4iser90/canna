@@ -1,11 +1,10 @@
 export async function fetchOwnPlants() {
   try {
-    const response = await fetch(`/api/ownPlants`,{
+    const response = await fetchWithCookies(`/api/ownPlants`,{
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include"
       }
     );
 
@@ -26,14 +25,13 @@ export async function fetchOwnPlants() {
 
 export async function fetchOwnPlantsById(plantId) {
   try {
-    const response = await fetch(
+    const response = await fetchWithCookies(
       `/api/ownPlants/${plantId}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include"
       }
     );
     if (!response.ok) {

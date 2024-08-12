@@ -15,6 +15,7 @@ export async function loadOwnPlantDetails(plantId) {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: 'include',
         });
 
         if (!response.ok) {

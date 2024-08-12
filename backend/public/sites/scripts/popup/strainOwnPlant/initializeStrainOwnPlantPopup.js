@@ -2,11 +2,10 @@ import { handleStrainOwnPlantForm } from "./handleStrainOwnPlantForm.js";
 
 export async function initializeStrainOwnPlantPopup(strainId, onSave) {
   try {
-    const response = await fetch(`/api/templatePlantDatabase/${strainId}`,{
+    const response = await fetchWithCookies(`/api/templatePlantDatabase/${strainId}`,{
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       }
     );
 

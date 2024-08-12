@@ -2,7 +2,7 @@ import { removeExistingPopup } from "../../utils/utils.js";
 
 export async function archivePlant(plantId, payload) {
     try {
-        const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
+        const response = await fetchWithCookies(`/api/ownPlants/archive/${plantId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +28,9 @@ export async function showManagePlantPopup(plantId) {
     removeExistingPopup("managePlantPopup");
 
     try {
-        const response = await fetch(`/popup/manage-plant/${plantId}`);
+        const response = await fetchWithCookies(`/popup/manage-plant/${plantId}`, {
+            method: 'GET',
+        });
         const popupHtml = await response.text();
 
         const popupContainer = document.createElement("div");
@@ -71,7 +73,7 @@ function initializePopupEventListeners(plantId) {
             return;
         }
         try {
-            const response = await fetch(`/api/ownPlants/${plantId}`, {
+            const response = await fetchWithCookies(`/api/ownPlants/${plantId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

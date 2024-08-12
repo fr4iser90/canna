@@ -1,9 +1,8 @@
-import { configURL } from "../../global.js";
 
 // Fetch user preferences from the server
 export async function fetchUserPreferences() {
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/api/preferences`, {
+    const response = await fetchWithCookies(`/api/preferences`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +45,7 @@ export async function fetchUserPreferences() {
 // Update user preferences on the server
 export async function updateUserPreferences(preferences) {
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/api/preferences`, {
+    const response = await fetchWithCookies(`/api/preferences`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

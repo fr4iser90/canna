@@ -24,13 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const query = searchInput.value.trim();
     if (query) {
       try {
-        const response = await fetch(
-          `${configURL.API_BASE_URL}/api/friends/search`,
+        const response = await fetchWithCookies(
+          `/api/friends/search`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({ query }),
           },
@@ -58,13 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function inviteFriend(friendId) {
     try {
-      const response = await fetch(
-        `${configURL.API_BASE_URL}/api/friends/invite`,
+      const response = await fetchWithCookies(
+        `/api/friends/invite`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ friendId }),
         },

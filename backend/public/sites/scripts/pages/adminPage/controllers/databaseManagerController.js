@@ -1,12 +1,11 @@
-import { configURL } from "../global.js";
-
 async function fetchDatabases(dbDropdown, dbFeedback) {
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases`, {
+    const response = await fetch(`/api/admin/databases`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -36,7 +35,7 @@ async function fetchCollections(dbName, collectionDropdown, dbFeedback) {
     return;
   }
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections`, {
+    const response = await fetchWithCookies(`/api/admin/databases/${dbName}/collections`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +64,7 @@ async function fetchCollections(dbName, collectionDropdown, dbFeedback) {
 async function dropDatabase(dbName, dbFeedback, fetchDatabases) {
   if (dbName && !["adminDb"].includes(dbName)) {
     try {
-      const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}`, {
+      const response = await fetchWithCookies(`/api/admin/databases/${dbName}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +86,7 @@ async function dropDatabase(dbName, dbFeedback, fetchDatabases) {
 async function dropCollection(dbName, collectionName, dbFeedback, fetchCollections) {
   if (dbName && collectionName && !["adminDb"].includes(dbName)) {
     try {
-      const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections/${collectionName}`, {
+      const response = await fetchWithCookies(`/api/admin/databases/${dbName}/collections/${collectionName}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

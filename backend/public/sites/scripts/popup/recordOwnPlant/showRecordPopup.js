@@ -14,14 +14,8 @@ export async function showRecordPopup(event, clickedDate) {
     const recordDate = dateObject.toISOString().split("T")[0];
 
 
-    const response = await fetch(
-      `/popup/record?plantId=${plantId}&recordDate=${recordDate}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const response = await fetchWithCookies(
+      `/popup/record?plantId=${plantId}&recordDate=${recordDate}`);
 
     if (!response.ok) {
       throw new Error("Network response was not ok");

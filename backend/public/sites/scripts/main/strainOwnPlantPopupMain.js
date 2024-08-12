@@ -67,13 +67,12 @@ export async function handleDrop(e, ownPlantsList) {
 
 async function handleSavePlant(plant) {
     try {
-        const response = await fetch(`/api/ownPlants`, {
+        const response = await fetchWithCookies(`/api/ownPlants`, {
             method: "POST",
             body: JSON.stringify(plant),
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: "include",
         });
 
         if (response.ok) {

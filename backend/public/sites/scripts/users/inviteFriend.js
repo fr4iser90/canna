@@ -1,10 +1,9 @@
-import { configURL } from "../global.js";
 import { loadFriendRequests } from "./loadFriendRequests.js";
 
 export async function inviteFriend(friendId) {
   try {
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/friends/invite`,
+    const response = await fetchWithCookies(
+      `/api/friends/invite`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

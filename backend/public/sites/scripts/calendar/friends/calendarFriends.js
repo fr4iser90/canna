@@ -2,10 +2,7 @@ import { updateEvent, deleteEvent, createEvent } from "../controllers/eventsCont
 
 async function fetchCalendars(calendarSelect) {
   try {
-    const response = await fetch(`/api/calendars`, {
-      method: "GET",
-      credentials: "include",
-    });
+    const response = await fetchWithCookies(`/api/calendars`, { method: "GET" });
 
     const calendars = await response.json();
 
@@ -35,11 +32,7 @@ async function loadCalendarEvents(calendarId) {
     droppable: true,
     events: async function (fetchInfo, successCallback, failureCallback) {
       try {
-        const response = await fetch(`/api/calendar/${calendarId}/events`, {
-          method: "GET",
-          credentials: "include",
-        });
-
+        const response = await fetchWithCookies(`/api/calendar/${calendarId}/events`, { method: "GET" });
         const data = await response.json();
 
         if (response.ok) {

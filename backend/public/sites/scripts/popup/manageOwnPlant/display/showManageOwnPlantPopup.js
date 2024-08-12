@@ -5,9 +5,8 @@ export async function showManageOwnPlantPopup(plantId) {
     removeExistingPopup("manageOwnPlantPopup");
 
     try {
-        const response = await fetch(`/popup/manage-plant/${plantId}`, {
+        const response = await fetchWithCookies(`/popup/manage-plant/${plantId}`, {
             method: 'GET',
-            credentials: 'include',
         });
         if (!response.ok) {
             throw new Error(`Failed to fetch popup content. Status: ${response.status}`);

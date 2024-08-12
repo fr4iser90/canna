@@ -1,9 +1,9 @@
-import { configURL } from "../../global.js";
+
 
 export async function fetchUserPreferences(popupContainer) {
   try {
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/preferences`,
+    const response = await fetchWithCookies(
+      `/api/preferences`,
     );
 
     if (!response.ok) {

@@ -1,5 +1,3 @@
-import { configURL } from "../global.js";
-
 export async function fetchFriends() {
   const friendsList = document.getElementById("friends-container");
 
@@ -9,7 +7,7 @@ export async function fetchFriends() {
   }
 
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/api/friends`, {
+    const response = await fetchWithCookies(`/api/friends`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

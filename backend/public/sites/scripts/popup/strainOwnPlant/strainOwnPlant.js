@@ -3,12 +3,11 @@ import { initializeStrainOwnPlantPopup } from "./initializeStrainOwnPlantPopup.j
 
 export async function showStrainOwnPlantPopup(strainId, onSave) {
   try {
-    const response = await fetch(`/popup/strainOwnPlantPopup?strainId=${strainId}`,{
+    const response = await fetchWithCookies(`/popup/strainOwnPlantPopup?strainId=${strainId}`,{
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     }
   );
 

@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     try {
-      const response = await fetch(`/api/ownPlants/${plantId}`, {
+      const response = await fetchWithCookies(`/api/ownPlants/${plantId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
+      const response = await fetchWithCookies(`/api/ownPlants/archive/${plantId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

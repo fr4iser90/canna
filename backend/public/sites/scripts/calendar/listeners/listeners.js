@@ -18,7 +18,6 @@ export function setupEventListeners() {
 
   if (myCalendarButton) {
     myCalendarButton.addEventListener("click", async () => {
-      // Eigenen Kalender laden, kein userId mehr nötig
       await initializeCalendar();
     });
   } else {
@@ -62,8 +61,7 @@ export function searchFriendsButton() {
   const searchFriendsButton = document.getElementById("search-friends-button");
   if (searchFriendsButton) {
     searchFriendsButton.addEventListener("click", () => {
-      // Direkter Aufruf des Backends ohne fetchWithAuth
-      fetch('/popup/friendSearchPopup')
+      fetchWithCookies(`/popup/friendSearchPopup`, { method: 'GET' })
         .then(response => response.text())
         .then(html => {
           document.body.insertAdjacentHTML('beforeend', html);

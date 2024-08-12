@@ -1,9 +1,7 @@
-import { configURL } from "../../global.js";
-
 export async function fetchUserPreferences(popupContainer) {
   try {
     // Anpassen der fetch-Anfrage ohne `userId` im Frontend
-    const response = await fetch(`${configURL.API_BASE_URL}/api/preferences`);
+    const response = await fetchWithCookies(`/api/preferences`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch user preferences");

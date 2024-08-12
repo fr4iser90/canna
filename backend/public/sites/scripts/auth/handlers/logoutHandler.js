@@ -1,6 +1,6 @@
 export async function handleLogout() {
     try {
-        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        await fetchWithCookies('/api/auth/logout', { method: 'POST'});
         localStorage.removeItem("user");
         window.location.href = "/login";
     } catch (error) {

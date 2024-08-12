@@ -2,12 +2,11 @@ import { formatDate } from "../../global.js";
 
 export async function fetchEvents() {
   try {
-    const response = await fetch(`/api/events`, {
+    const response = await fetchWithCookies(`/api/events`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     });
     
     if (!response.ok) {
@@ -35,13 +34,12 @@ export async function createEvent(plantId, eventData) {
     eventData.start = formatDate(eventData.start);
     eventData.end = formatDate(eventData.end);
 
-    const response = await fetch(`/api/events/${plantId}`, {
+    const response = await fetchWithCookies(`/api/events/${plantId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(eventData),
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -78,13 +76,12 @@ export async function updateEvent(eventId, info) {
   };
 
   try {
-    const response = await fetch(`/api/events/${eventId}`, {
+    const response = await fetchWithCookies(`/api/events/${eventId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(updatedEvent),
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -109,12 +106,11 @@ export async function deleteEvent(plantId) {
       return false;
     }
 
-    const response = await fetch(`/api/events/${plantId}`, {
+    const response = await fetchWithCookies(`/api/events/${plantId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     });
 
     if (response.ok) {

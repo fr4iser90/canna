@@ -26,7 +26,7 @@ export async function searchFriendsButton() {
   if (searchFriendsButton) {
     searchFriendsButton.addEventListener("click", async () => {
       try {
-        const response = await fetch("/popup/friendSearchPopup", {
+        const response = await fetchWithCookies(`/popup/friendSearchPopup`, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -1,9 +1,7 @@
-import { configURL } from "../../global.js";
-
 export async function updateOwnPlants(plantId, plantData) {
   try {
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/ownPlants/${plantId}`,
+    const response = await fetchWithCookies(
+      `/api/ownPlants/${plantId}`,
       {
         method: "PUT",
         headers: {

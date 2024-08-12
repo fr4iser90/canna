@@ -1,5 +1,3 @@
-import { configURL } from "../global.js";
-
 export async function initializeDatabaseManager() {
   const dbDropdown = document.getElementById("dbDropdown");
   const collectionDropdown = document.getElementById("collectionDropdown");
@@ -7,7 +5,7 @@ export async function initializeDatabaseManager() {
 
   async function fetchDatabases() {
     try {
-      const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases`, {
+      const response = await fetchWithCookies(`/api/admin/databases`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +39,7 @@ export async function initializeDatabaseManager() {
       return;
     }
     try {
-      const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections`, {
+      const response = await fetchWithCookies(`/api/admin/databases/${dbName}/collections`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +79,7 @@ export async function initializeDatabaseManager() {
     if (dbName && !["adminDb"].includes(dbName)) {
       // Ensure adminDb cannot be dropped
       try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}`, {
+        const response = await fetchWithCookies(`/api/admin/databases/${dbName}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -106,11 +104,12 @@ export async function initializeDatabaseManager() {
     if (dbName && collectionName && !["adminDb"].includes(dbName)) {
       // Ensure collections in adminDb cannot be dropped
       try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections/${collectionName}`, {
+        const response = await fetchWithCookies(`/api/admin/databases/${dbName}/collections/${collectionName}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: 'include',
         });
 
         const result = await response.json();

@@ -1,11 +1,10 @@
 export async function fetchUserPreferences() {
   try {
-    const response = await fetch(`/api/preferences`, {
+    const response = await fetchWithCookies(`/api/preferences`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
     });
 
     if (!response.ok) {
@@ -44,13 +43,12 @@ export async function fetchUserPreferences() {
 // Update user preferences on the server
 export async function updateUserPreferences(preferences) {
   try {
-    const response = await fetch(`/api/preferences`, {
+    const response = await fetchWithCookies(`/api/preferences`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(preferences),
-      credentials: "include",
     });
 
     if (!response.ok) {

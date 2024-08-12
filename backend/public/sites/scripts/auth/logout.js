@@ -1,8 +1,6 @@
-import { configURL } from "../global.js";
-
 export async function logout() {
   try {
-    await fetch(`${configURL.API_BASE_URL}/api/auth/logout`, { method: 'POST' });
+    await fetchWithCookies(`/api/auth/logout`, { method: 'POST', credentials: 'include' });
     localStorage.removeItem("user");
     window.location.href = "/login";
 } catch (error) {

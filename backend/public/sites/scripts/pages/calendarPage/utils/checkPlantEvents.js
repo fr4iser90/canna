@@ -1,6 +1,6 @@
 export async function checkPlantEvents(plantId) {
   try {
-    const response = await fetch(`/api/events/checkPlantEvents/${plantId}`, {
+    const response = await fetchWithCookies(`/api/events/checkPlantEvents/${plantId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

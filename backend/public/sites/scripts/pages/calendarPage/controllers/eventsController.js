@@ -1,13 +1,11 @@
-import { configURL, formatDate } from "../../global.js";
-
-// Fetch all events for the authenticated user
 export async function fetchEvents() {
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/api/events`, {
+    const response = await fetch(`/api/events`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -36,13 +34,14 @@ export async function createEvent(plantId, eventData) {
     eventData.end = formatDate(eventData.end);
 
     const response = await fetch(
-      `${configURL.API_BASE_URL}/api/events/${plantId}`,
+      `/api/events/${plantId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(eventData),
+        credentials: 'include',
       },
     );
 
@@ -83,13 +82,14 @@ export async function updateEvent(eventId, info) {
 
   try {
     const response = await fetch(
-      `${configURL.API_BASE_URL}/api/events/${eventId}`,
+      `/api/events/${eventId}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedEvent),
+        credentials: 'include',
       },
     );
 
@@ -115,8 +115,7 @@ export async function deleteEvent(plantId) {
       return false;
     }
 
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/events/${plantId}`,
+    const response = await fetchWithCookies(`/api/events/${plantId}`,
       {
         method: "DELETE",
         headers: {

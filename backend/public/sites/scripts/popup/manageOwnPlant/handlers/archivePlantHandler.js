@@ -15,7 +15,7 @@ export function archivePlantHandler(plantId) {
         };
 
         try {
-            const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
+            const response = await fetchWithCookies(`/api/ownPlants/archive/${plantId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

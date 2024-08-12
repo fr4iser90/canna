@@ -1,11 +1,11 @@
-import { configURL } from "../global.js";
+
 import { loadFriendRequests } from "./loadFriendRequests.js";
 import { loadFriendsList } from "./loadFriendsList.js";
 
 export async function handleFriendRequest(requestId, action) {
   try {
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/friends/requests/${action}`,
+    const response = await fetchWithCookies(
+      `/api/friends/requests/${action}`,
       {
         method: 'POST',
         headers: {

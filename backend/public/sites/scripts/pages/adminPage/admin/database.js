@@ -1,12 +1,10 @@
-import { configURL } from "../global.js";
-
 document.addEventListener("DOMContentLoaded", async function () {
 
   document.getElementById("dropDatabaseButton").addEventListener("click", async () => {
     const dbName = document.getElementById("dbName").value;
     if (dbName) {
       try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}`, {
+        const response = await fetchWithCookies(`/api/admin/databases/${dbName}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -27,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const collectionName = document.getElementById("collectionName").value;
     if (dbName && collectionName) {
       try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections/${collectionName}`, {
+        const response = await fetchWithCookies(`/api/admin/databases/${dbName}/collections/${collectionName}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

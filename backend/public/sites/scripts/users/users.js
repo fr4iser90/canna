@@ -1,11 +1,9 @@
-import { configURL } from "../global.js";
-
 document.addEventListener("DOMContentLoaded", function () {
   // Profil laden
   async function loadProfile() {
     try {
-      const response = await fetch(
-        `${configURL.API_BASE_URL}/api/profile/profile`,
+      const response = await fetchWithCookies(
+        `/api/profile/profile`,
         {
           method: "GET",
           headers: {
@@ -40,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       try {
-        const response = await fetch(
-          `${configURL.API_BASE_URL}/api/users/me`,
+        const response = await fetchWithCookies(
+          `/api/users/me`,
           {
             method: "PUT",
             headers: {
@@ -66,8 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Freundesliste laden
   async function loadFriends() {
     try {
-      const response = await fetch(
-        `${configURL.API_BASE_URL}/api/friends`,
+      const response = await fetchWithCookies(
+        `/api/friends`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -104,8 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       try {
-        const response = await fetch(
-          `${configURL.API_BASE_URL}/api/friends/search?query=${query}`,
+        const response = await fetchWithCookies(
+          `/api/friends/search?query=${query}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -144,8 +142,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Freundschaftsanfrage senden
   async function sendFriendRequest(toUserId) {
     try {
-      const response = await fetch(
-        `${configURL.API_BASE_URL}/api/friends/request`,
+      const response = await fetchWithCookies(
+        `/api/friends/request`,
         {
           method: "POST",
           headers: {

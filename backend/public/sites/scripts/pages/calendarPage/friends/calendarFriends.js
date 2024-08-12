@@ -3,8 +3,9 @@ import { updateEvent, deleteEvent, createEvent } from "./events.js";
 
 async function fetchCalendars(calendarSelect) {
   try {
-    let response = await fetch(`${configURL.API_BASE_URL}/api/calendars`, {
+    let response = await fetch(`/api/calendars`, {
       method: "GET",
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -38,8 +39,7 @@ async function loadCalendarEvents(calendarId) {
     droppable: true,
     events: async function (fetchInfo, successCallback, failureCallback) {
       try {
-        const response = await fetch(
-          `${configURL.API_BASE_URL}/api/calendar/${calendarId}/events`,
+        const response = await fetchWithCookies(`/api/calendar/${calendarId}/events`,
           {
             method: "GET",
           },

@@ -1,10 +1,9 @@
-import { configURL } from "../global.js";
 import { displayBlockedUsers } from "./displayBlockedUsers.js";
 
 export async function loadBlockedUsers() {
   try {
-    const response = await fetch(
-      `${configURL.API_BASE_URL}/api/friends/blocked`,
+    const response = await fetchWithCookies(
+      `/api/friends/blocked`,
       {
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,3 @@
-import { configURL } from "../../../global.js";
-
 export function deletePlantHandler(plantId) {
     document.getElementById("confirmDeleteButton").addEventListener("click", async () => {
         const plantNameInput = document.getElementById("confirmDeleteName").value.trim();
@@ -12,7 +10,7 @@ export function deletePlantHandler(plantId) {
 
         try {
             // Delete the plant
-            const deletePlantResponse = await fetch(`${configURL.API_BASE_URL}/api/ownPlants/${plantId}`, {
+            const deletePlantResponse = await fetchWithCookies(`/api/ownPlants/${plantId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -24,7 +22,7 @@ export function deletePlantHandler(plantId) {
             }
 
             // Delete associated events
-            const deleteEventsResponse = await fetch(`${configURL.API_BASE_URL}/api/events/plant/${plantId}`, {
+            const deleteEventsResponse = await fetchWithCookies(`/api/events/plant/${plantId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"

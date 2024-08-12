@@ -1,11 +1,11 @@
 import { removeExistingPopup } from "../../utils/utils.js";
-import { configURL } from "../../../global.js";
+
 import { initializePlantEventPopup } from "./initializePlantEventPopup.js";
 import { fetchUserPreferences } from "../recordOwnPlant/fetchUserPreferences.js";
 
 export async function showEventsOwnPlantPopup(eventData, droppedDate, callback) {
   try {
-    const response = await fetch(`${configURL.API_BASE_URL}/popup/plantEventPopup`);
+    const response = await fetchWithCookies(`/popup/plantEventPopup`);
 
     if (!response.ok) {
       console.error("Network response was not ok. Status:", response.status);
