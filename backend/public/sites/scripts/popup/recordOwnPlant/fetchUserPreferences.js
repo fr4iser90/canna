@@ -1,10 +1,9 @@
-import { getUserId, fetchWithAuth, configURL } from "../../global.js";
+import { configURL } from "../../global.js";
 
 export async function fetchUserPreferences(popupContainer) {
   try {
-    const userId = getUserId(); // Or however you get the userId
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/preferences/${userId}`,
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/preferences`,
     );
 
     if (!response.ok) {

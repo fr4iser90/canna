@@ -1,13 +1,21 @@
-import { fetchWithAuth } from "../global.js";
+import { configURL } from "../global.js";
 import { loadBlockedUsers } from "./loadBlockedUsers.js";
 
 export async function unblockUser(userId) {
   try {
-    const response = await fetchWithAuth('/api/friends/unblock', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
-    });
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/friends/unblock`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Falls Authentifizierungs-Header erforderlich sind, füge sie hier hinzu.
+          // 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId })
+      }
+    );
+
     if (response.ok) {
       alert('User unblocked!');
       loadBlockedUsers();
@@ -19,4 +27,3 @@ export async function unblockUser(userId) {
     console.error('Error unblocking user:', error);
   }
 }
-

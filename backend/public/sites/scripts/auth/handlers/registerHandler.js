@@ -1,5 +1,3 @@
-import { configURL } from "../../global.js";
-
 export async function handleRegister(event) {
     event.preventDefault();
     const registerForm = event.target;
@@ -9,7 +7,7 @@ export async function handleRegister(event) {
     const password = formData.get("password");
 
     try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/auth/register`, {
+        const response = await fetch(`/api/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, password }),
@@ -17,7 +15,7 @@ export async function handleRegister(event) {
 
         const data = await response.json();
 
-        if (response.ok && data.token) {
+        if (response.ok) {
             alert("Successfully registered!");
             localStorage.setItem("user", JSON.stringify({ username, role: data.role }));
             window.location.href = "/calendar";

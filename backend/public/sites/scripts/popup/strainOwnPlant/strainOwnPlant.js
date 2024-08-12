@@ -1,16 +1,16 @@
 import { removeExistingPopup } from "../../utils/utils.js";
-import { getToken, fetchWithAuth } from "../../global.js";
 import { initializeStrainOwnPlantPopup } from "./initializeStrainOwnPlantPopup.js";
 
 export async function showStrainOwnPlantPopup(strainId, onSave) {
   try {
-      const token = getToken();
-
-    const response = await fetchWithAuth(`/popup/strainOwnPlantPopup?strainId=${strainId}`, {
+    const response = await fetch(`/popup/strainOwnPlantPopup?strainId=${strainId}`,{
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-    });
+      credentials: "include",
+    }
+  );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -21,6 +21,9 @@ export async function showStrainOwnPlantPopup(strainId, onSave) {
     popupContainer.id = "popupContainer";
     popupContainer.innerHTML = html;
 
+    // Entferne vorhandene Popups, bevor ein neues hinzugefügt wird
+    removeExistingPopup();
+    
     document.body.appendChild(popupContainer);
 
     initializeStrainOwnPlantPopup(strainId, onSave);

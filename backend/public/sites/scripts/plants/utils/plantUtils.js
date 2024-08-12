@@ -9,8 +9,6 @@ export function createPlantElement(plant, addDetailsClick) {
   div.classList.add("plant");
   div.dataset.plantId = plant._id;
 
-  const userId = getUserId();
-
    // Draggability based on plant phase
    if (plant.plantPhase === 'not_set') {
     div.draggable = true;

@@ -1,21 +1,20 @@
-import { getToken } from "../../global.js";
 import { handleStrainOwnPlantForm } from "./handleStrainOwnPlantForm.js";
 
 export async function initializeStrainOwnPlantPopup(strainId, onSave) {
   try {
-    const token = getToken();
+    const response = await fetch(`/api/templatePlantDatabase/${strainId}`,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
-    const strainResponse = await fetch(`/api/templatePlantDatabase/${strainId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!strainResponse.ok) {
+    if (!response.ok) {
       throw new Error("Failed to fetch strain data");
     }
 
-    const strainData = await strainResponse.json();
+    const strainData = await response.json();
   
     // Populate the popup form with strain data
     document.getElementById("plantName").value = strainData.name;

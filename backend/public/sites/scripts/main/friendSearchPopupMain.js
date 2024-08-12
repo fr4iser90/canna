@@ -1,4 +1,3 @@
-import { fetchWithAuth } from "../global.js";
 import { searchFriends } from "../users/searchFriends.js";
 import { inviteFriend } from "../users/inviteFriend.js";
 import { loadFriendRequests } from "../users/loadFriendRequests.js";
@@ -9,7 +8,6 @@ export function initializeFriendSearchPopup() {
   const popup = document.getElementById("friend-search-popup");
   const closeBtn = popup.querySelector(".close");
 
-      
   if (popup && closeBtn) {
     closeBtn.addEventListener("click", () => {
       popup.parentElement.remove();
@@ -24,7 +22,6 @@ export function initializeFriendSearchPopup() {
     console.error("Popup or close button not found");
     return;
   }
-
 
   // Handle friend search
   const inviteFriendButton = document.getElementById("invite-friend-button");

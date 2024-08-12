@@ -1,4 +1,3 @@
-import { fetchWithAuth } from "../../global.js";
 import { updateGrowthConditions } from "../../divs/ownPlantPage/growthConditions.js";
 import { updateHarvestInfo } from "../../divs/ownPlantPage/harvestInfo.js";
 import { updateImages } from "../../divs/ownPlantPage/images.js";
@@ -11,7 +10,7 @@ export async function loadOwnPlantDetails(plantId) {
     try {
         console.log("Plant details fetched:", plantId);
         console.log("fetching plant;", plantId);
-        const response = await fetchWithAuth(`/api/ownPlants/${plantId}`, {
+        const response = await fetch(`/api/ownPlants/${plantId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

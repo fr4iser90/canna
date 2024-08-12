@@ -1,4 +1,4 @@
-import { fetchWithAuth, getUserId } from "../../../global.js";
+import { configURL } from "../../../global.js";
 
 export function deletePlantHandler(plantId) {
     document.getElementById("confirmDeleteButton").addEventListener("click", async () => {
@@ -11,7 +11,8 @@ export function deletePlantHandler(plantId) {
         }
 
         try {
-            const deletePlantResponse = await fetchWithAuth(`/api/ownPlants/${plantId}`, {
+            // Delete the plant
+            const deletePlantResponse = await fetch(`${configURL.API_BASE_URL}/api/ownPlants/${plantId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -22,8 +23,8 @@ export function deletePlantHandler(plantId) {
                 throw new Error("Failed to delete plant");
             }
 
-            const userId = getUserId();
-            const deleteEventsResponse = await fetchWithAuth(`/api/events/${userId}/events/${plantId}`, {
+            // Delete associated events
+            const deleteEventsResponse = await fetch(`${configURL.API_BASE_URL}/api/events/plant/${plantId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"

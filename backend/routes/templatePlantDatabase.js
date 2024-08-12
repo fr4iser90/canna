@@ -14,6 +14,7 @@ router
     authenticateToken,
     strainDefinitionsController.getStrainDefinitions,
   )
+  
   .post(
     authenticateToken,
     roleMiddleware(["admin", "moderator"]),

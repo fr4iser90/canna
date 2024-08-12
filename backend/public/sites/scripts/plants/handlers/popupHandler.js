@@ -1,15 +1,13 @@
 import { removeExistingPopup } from "../../utils/utils.js";
-import { getToken, fetchWithAuth } from "../../global.js";
 
-export async function archivePlant(plantId) {
+export async function archivePlant(plantId, payload) {
     try {
-        const token = getToken();
         const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             },
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -17,7 +15,7 @@ export async function archivePlant(plantId) {
         }
 
         const result = await response.json();
-          const plantElement = document.querySelector(`[data-plant-id="${plantId}"]`);
+        const plantElement = document.querySelector(`[data-plant-id="${plantId}"]`);
         if (plantElement) {
             plantElement.remove();
         }
@@ -27,20 +25,18 @@ export async function archivePlant(plantId) {
 }
 
 export async function showManagePlantPopup(plantId) {
-  
     removeExistingPopup("managePlantPopup");
 
     try {
-        const response = await fetchWithAuth(`/popup/manage-plant/${plantId}`);
+        const response = await fetch(`/popup/manage-plant/${plantId}`);
         const popupHtml = await response.text();
-  
+
         const popupContainer = document.createElement("div");
         popupContainer.id = "managePlantPopup";
         popupContainer.classList.add("popup-container");
         popupContainer.innerHTML = popupHtml;
         document.body.appendChild(popupContainer);
 
-  
         initializePopupEventListeners(plantId);
     } catch (error) {
         console.error("Error fetching popup content:", error);
@@ -50,7 +46,7 @@ export async function showManagePlantPopup(plantId) {
 
 function initializePopupEventListeners(plantId) {
     document.getElementById("confirmArchiveButton").addEventListener("click", async () => {
-          const yieldAmount = document.getElementById("archiveYield").value;
+        const yieldAmount = document.getElementById("archiveYield").value;
         const reason = document.querySelector('input[name="archiveReason"]:checked')?.value || null;
         const diseaseType = document.getElementById("diseaseType")?.value || null;
         const malnutritionType = document.getElementById("malnutritionType")?.value || null;
@@ -64,45 +60,21 @@ function initializePopupEventListeners(plantId) {
             notes: additionalNotes,
         };
 
-        try {
-            const token = getToken();
-            const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to archive plant");
-            }
-
-            const result = await response.json();
-              const plantElement = document.querySelector(`[data-plant-id="${plantId}"]`);
-            if (plantElement) {
-                plantElement.remove();
-            }
-            document.getElementById("managePlantPopup").remove();
-        } catch (error) {
-            console.error("Error archiving plant:", error);
-        }
+        await archivePlant(plantId, payload);
+        document.getElementById("managePlantPopup").remove();
     });
 
     document.getElementById("confirmDeleteButton").addEventListener("click", async () => {
-          const plantName = document.getElementById("confirmDeleteName").value;
+        const plantName = document.getElementById("confirmDeleteName").value;
         if (plantName !== document.querySelector(`[data-plant-id="${plantId}"]`).dataset.plantName) {
             alert("Plant name does not match. Deletion cancelled.");
             return;
         }
         try {
-            const token = getToken();
             const response = await fetch(`/api/ownPlants/${plantId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
                 },
             });
 

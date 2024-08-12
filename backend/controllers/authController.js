@@ -68,6 +68,7 @@ export const register = async (req, res) => {
 
 // Login a user
 export const login = async (req, res) => {
+  console.log("Login function called");
   const { username, password } = req.body;
 
   try {
@@ -84,8 +85,17 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
+    // Generate tokens
     const accessToken = tokenController.generateAccessToken(user);
     const refreshToken = tokenController.generateRefreshToken(user);
+
+    console.log("Generated Access Token:", typeof accessToken);
+    console.log("Generated Refresh Token:", typeof refreshToken);
+
+    // Check if tokens are valid strings
+    if (typeof accessToken !== 'string' || typeof refreshToken !== 'string') {
+      throw new Error('Failed to generate valid tokens');
+    }
 
     const authData = {
       accessToken,
@@ -94,12 +104,18 @@ export const login = async (req, res) => {
       role: user.roles,
     };
 
+    console.log("Auth Data to be sent:", authData);
+
+    // Send token as a cookie
     res.cookie("authData", JSON.stringify(authData), {
       httpOnly: true,
       secure: true,
+      sameSite: 'None',
+      domain: '.fr4iserhome.com',
       maxAge: 7200000, // 2 hours
     });
 
+    // Send token as part of the JSON response
     res.json({ message: "Login successful", ...authData });
   } catch (err) {
     console.error("Error logging in:", err.message);

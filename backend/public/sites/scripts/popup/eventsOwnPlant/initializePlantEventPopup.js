@@ -1,8 +1,6 @@
-import { getToken, fetchWithAuth, getUserId, formatDate } from "../../global.js";
-import { fetchUserPreferences } from "../recordOwnPlant/fetchUserPreferences.js";
+import { fetchOwnPlantsById } from "../../plants/fetch/fetchOwnPlants.js";
 import { handlePlantEventForm } from "./handlePlantEventForm.js";
 import { updateSeedCuttingForm } from "./updateSeedCuttingForm.js";
-import { fetchOwnPlantsById } from "../../plants/fetch/fetchOwnPlants.js";
 
 // Initialize popup function that sets up the HTML and event listeners
 export async function initializePlantEventPopup(popupContainer, eventData, droppedDate, callback) {

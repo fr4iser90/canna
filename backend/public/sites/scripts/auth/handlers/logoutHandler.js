@@ -1,5 +1,11 @@
-export function handleLogout() {
-    localStorage.removeItem("user");
-    document.cookie = "authData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/login.html";
+export async function handleLogout() {
+    try {
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+    } catch (error) {
+        console.error("Error during logout:", error);
+        alert("An error occurred while logging out. Please try again.");
+    }
 }
+

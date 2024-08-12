@@ -1,58 +1,51 @@
-import jwt from "jsonwebtoken";
-import { getConnection } from "../config/dbConnections.js";
-import createUserModel from "../models/User.js";
-import { isTokenBlacklisted } from "../utils/blacklist.js";
 import fs from 'fs';
-import path from "path";
-import { fileURLToPath } from "url";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import jwt from 'jsonwebtoken';
+import { isTokenBlacklisted } from '../utils/blacklist.js';
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const publicKeyPath = path.resolve(__dirname, "../../secrets/keys/public.pem");
-
-// Load the public key
-const publicKey = fs.readFileSync(publicKeyPath, "utf8");
+const publicKeyPath = path.resolve(__dirname, '../../secrets/keys/public.pem');
+const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
 
 export async function authenticateToken(req, res, next) {
-  let token;
-  const authHeader = req.headers["authorization"];
-
-  if (authHeader) {
-    token = authHeader.split(" ")[1];
-  } else if (req.cookies.authData) {
-    const authData = JSON.parse(decodeURIComponent(req.cookies.authData));
-    token = authData ? authData.accessToken : null;
-  }
-
-  if (!token) {
-    return res.status(401).json({ message: "Access denied: No token provided" });
-  }
-
-  if (await isTokenBlacklisted(token)) {
-    return res.status(403).json({ message: "Access denied: Token is blacklisted" });
-  }
-
-  try {
-    const decoded = jwt.verify(token, publicKey, { algorithms: ["RS256"] });
-
-    const dbConnection = await getConnection("userDb");
-    const User = createUserModel(dbConnection);
-
-    const dbUser = await User.findById(decoded._id).populate("roles");
-    if (!dbUser) {
-      return res.status(404).json({ message: "User not found" });
+    let token = null;
+    // Check the cookies for authData
+    if (req.cookies.authData) {
+        try {
+            const authData = JSON.parse(decodeURIComponent(req.cookies.authData));
+            token = authData.accessToken;
+        } catch (err) {
+            console.error("Error parsing token from cookies:", err.message);
+            return res.status(400).json({ message: "Invalid token format in cookies" });
+        }
     }
 
-    req.user = {
-      _id: dbUser._id,
-      username: dbUser.username,
-      roles: dbUser.roles.map((role) => role.name),
-    };
+    // If no token is found, deny access
+    if (!token) {
+        console.error("No token found in cookies");
+        return res.status(401).json({ message: "Access denied: No token provided" });
+    }
 
-    next();
-  } catch (err) {
-    res.status(403).json({ message: "Invalid token", error: err.message });
-  }
+    // Verify if the token is blacklisted
+    if (await isTokenBlacklisted(token)) {
+        return res.status(403).json({ message: "Access denied: Token is blacklisted" });
+    }
+
+    // Verify the token using the public key
+    try {
+        const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+        req.user = {
+            _id: decoded._id,
+            username: decoded.username,
+            roles: decoded.roles
+        };
+        next();
+    } catch (err) {
+        console.error("Error verifying token:", err.message);
+        return res.status(403).json({ message: "Invalid token", error: err.message });
+    }
 }

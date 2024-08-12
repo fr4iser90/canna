@@ -1,17 +1,14 @@
-import { checkTokenAndRedirect } from "../../../global.js";
 import {
   fetchUsers,
   addUserToTable,
   editUser,
   deleteUser,
+  createUser,
 } from "../controllers/userManagerController.js";
 
 export async function initializeUserManager() {
-  await checkTokenAndRedirect();
   const userForm = document.getElementById("userForm");
-  const userTable = document
-    .getElementById("userTable")
-    .getElementsByTagName("tbody")[0];
+  const userTable = document.getElementById("userTable").getElementsByTagName("tbody")[0];
 
   userForm.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -20,23 +17,14 @@ export async function initializeUserManager() {
       password: document.getElementById("password").value,
       role: document.getElementById("role").value,
     };
+
     try {
-      let response = await fetchWithAuth(
-        `${configURL.API_BASE_URL}/api/admin/users`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        },
-      );
-      let data = await response.json();
-      if (response.ok) {
-        addUserToTable(data, userTable);
+      const newUser = await createUser(userData);
+      if (newUser) {
+        addUserToTable(newUser, userTable);
         userForm.reset();
       } else {
-        alert("Error: " + data.message);
+        alert("Error: Failed to add user.");
       }
     } catch (error) {
       console.error("Error adding user:", error);

@@ -1,4 +1,3 @@
-import { checkTokenAndRedirect } from "../global.js";
 import { initializeDatabaseManager } from "../admin/databaseManager.js";
 import { initializeUserManager } from "../admin/userManager.js";
 import { initializeChangePassword } from "../auth/changePassword.js";
@@ -7,7 +6,6 @@ import { logout } from "../auth/logout.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   // Überprüfe den Token und leite um, falls er ungültig ist
-  await checkTokenAndRedirect();
   
   // Initialisiere allgemeine Funktionen
   await initializeCommonFeatures();

@@ -1,7 +1,6 @@
-import { configURL, fetchWithAuth, checkTokenAndRedirect } from "../global.js";
+import { configURL } from "../global.js";
 
 export async function initializeUserManager() {
-  await checkTokenAndRedirect(); // Sicherstellen, dass der Benutzer authentifiziert ist
   const userForm = document.getElementById("userForm");
   const userTable = document
     .getElementById("userTable")
@@ -15,16 +14,13 @@ export async function initializeUserManager() {
       role: document.getElementById("role").value,
     };
     try {
-      let response = await fetchWithAuth(
-        `${configURL.API_BASE_URL}/api/admin/users`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
+      let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(userData),
+      });
       let data = await response.json();
       if (response.ok) {
         addUserToTable(data);
@@ -39,15 +35,12 @@ export async function initializeUserManager() {
 
   async function fetchUsers() {
     try {
-      let response = await fetchWithAuth(
-        `${configURL.API_BASE_URL}/api/admin/users`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
       let data = await response.json();
       if (response.ok) {
         data.forEach((user) => addUserToTable(user));
@@ -80,16 +73,13 @@ export async function initializeUserManager() {
     if (newUsername) {
       user.username = newUsername;
       try {
-        let response = await fetchWithAuth(
-          `${configURL.API_BASE_URL}/api/admin/users/${user._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
+        let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users/${user._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify(user),
+        });
         if (response.ok) {
           let row = userTable.querySelector(`[data-id="${user._id}"]`);
           row.cells[0].textContent = user.username;
@@ -106,15 +96,12 @@ export async function initializeUserManager() {
   async function deleteUser(id, row) {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
-        let response = await fetchWithAuth(
-          `${configURL.API_BASE_URL}/api/admin/users/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
+        let response = await fetch(`${configURL.API_BASE_URL}/api/admin/users/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+        });
         if (response.ok) {
           row.remove();
         } else {

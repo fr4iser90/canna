@@ -1,17 +1,12 @@
-import { configURL, fetchWithAuth } from "../../global.js";
-
 export async function fetchDatabasePlants() {
   try {
-    const token = getToken();
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/templatePlantDatabase`,
-      {
+    const response = await fetch(`/api/templatePlantDatabase`,{
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
-      },
+        credentials: "include"
+      }
     );
 
     if (!response.ok) {
@@ -21,7 +16,9 @@ export async function fetchDatabasePlants() {
       );
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log("Fetched database plants:", data);
+    return data;
   } catch (error) {
     console.error("Error fetching database plants:", error);
     throw error;

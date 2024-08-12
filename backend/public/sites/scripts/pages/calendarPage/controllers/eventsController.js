@@ -1,19 +1,19 @@
-import { configURL, fetchWithAuth, formatDate } from "../../global.js";
+import { configURL, formatDate } from "../../global.js";
 
-export async function fetchEvents(userId) {
+// Fetch all events for the authenticated user
+export async function fetchEvents() {
   try {
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/events/${userId}/events`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${configURL.API_BASE_URL}/api/events`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     const data = await response.json();
     return data.map((event) => ({
       id: event._id,
@@ -28,14 +28,15 @@ export async function fetchEvents(userId) {
   }
 }
 
-export async function createEvent(userId, plantId, eventData) {
+// Create a new event for the authenticated user
+export async function createEvent(plantId, eventData) {
   try {
     // Ensure the dates are formatted correctly
     eventData.start = formatDate(eventData.start);
     eventData.end = formatDate(eventData.end);
 
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/events/${userId}/events/${plantId}`,
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/events/${plantId}`,
       {
         method: "POST",
         headers: {
@@ -47,7 +48,7 @@ export async function createEvent(userId, plantId, eventData) {
 
     if (!response.ok) {
       const errorData = await response.json();
-  
+
       let errorMessage = `HTTP error! Status: ${response.status}`;
       if (
         response.status === 400 &&
@@ -68,7 +69,8 @@ export async function createEvent(userId, plantId, eventData) {
   }
 }
 
-export async function updateEvent(userId, eventId, info) {
+// Update an event for the authenticated user
+export async function updateEvent(eventId, info) {
   const updatedEvent = {
     id: info.event.id,
     title: info.event.title,
@@ -80,8 +82,8 @@ export async function updateEvent(userId, eventId, info) {
   };
 
   try {
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/events/${userId}/events/${eventId}`,
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/events/${eventId}`,
       {
         method: "PUT",
         headers: {
@@ -104,7 +106,8 @@ export async function updateEvent(userId, eventId, info) {
   }
 }
 
-export async function deleteEvent(userId, plantId) {
+// Delete an event for the authenticated user
+export async function deleteEvent(plantId) {
   try {
     if (!plantId) {
       console.error("Invalid plant ID. Cannot delete event.");
@@ -112,8 +115,8 @@ export async function deleteEvent(userId, plantId) {
       return false;
     }
 
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/events/${userId}/events/${plantId}`,
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/events/${plantId}`,
       {
         method: "DELETE",
         headers: {

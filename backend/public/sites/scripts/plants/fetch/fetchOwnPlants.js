@@ -1,17 +1,14 @@
-import { configURL, fetchWithAuth, getToken, getCookies } from "../../global.js";
-
 export async function fetchOwnPlants() {
   try {
-    const token = getToken();
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/ownPlants`,
-      {
+    const response = await fetch(`/api/ownPlants`,{
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-      },
+        credentials: "include"
+      }
     );
+
     if (!response.ok) {
       const responseData = await response.json();
       throw new Error(
@@ -29,15 +26,15 @@ export async function fetchOwnPlants() {
 
 export async function fetchOwnPlantsById(plantId) {
   try {
-    const token = getToken();
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/ownPlants/${plantId}`,
+    const response = await fetch(
+      `/api/ownPlants/${plantId}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-      },
+        credentials: "include"
+      }
     );
     if (!response.ok) {
       const responseData = await response.json();

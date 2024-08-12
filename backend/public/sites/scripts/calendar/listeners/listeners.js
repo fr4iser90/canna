@@ -1,28 +1,28 @@
 import { initializeCalendar } from "../init/initializeCalendar.js";
-import { fetchWithAuth } from "../../global.js";
 
 export function setupEventListeners() {
   
   const friendsListEl = document.getElementById("friends-container");
   const myCalendarButton = document.getElementById("my-calendar-button");
+
   if (friendsListEl) {
     friendsListEl.addEventListener("click", async (event) => {
       if (event.target.classList.contains("friend-item")) {
-        const friendUserId = event.target.dataset.userId;
-          await initializeCalendar(friendUserId);
+        // Kalender des Freundes laden, kein userId mehr nötig
+        await initializeCalendar(); 
       }
     });
   } else {
-    console.error("Element with ID friends-container not found");
+    console.error("Element mit ID friends-container not found");
   }
 
   if (myCalendarButton) {
     myCalendarButton.addEventListener("click", async () => {
-      const userId = getUserId();
-        await initializeCalendar(userId);
+      // Eigenen Kalender laden, kein userId mehr nötig
+      await initializeCalendar();
     });
   } else {
-    console.error("Element with ID my-calendar-button not found");
+    console.error("Element mit ID my-calendar-button not found");
   }
 }
 
@@ -50,7 +50,7 @@ export function plantDropListener() {
                       plantId: event.target.dataset.plantId
                   }
               };
-                event.dataTransfer.setData('application/json', JSON.stringify(eventData));
+              event.dataTransfer.setData('application/json', JSON.stringify(eventData));
           }
       });
   } else {
@@ -62,12 +62,13 @@ export function searchFriendsButton() {
   const searchFriendsButton = document.getElementById("search-friends-button");
   if (searchFriendsButton) {
     searchFriendsButton.addEventListener("click", () => {
-      fetchWithAuth('/popup/friendSearchPopup')
+      // Direkter Aufruf des Backends ohne fetchWithAuth
+      fetch('/popup/friendSearchPopup')
         .then(response => response.text())
         .then(html => {
           document.body.insertAdjacentHTML('beforeend', html);
   
-          // Dynamically load the friendSearchPopupMain.js script
+          // Dynamisches Laden des friendSearchPopupMain.js-Skripts
           const script = document.createElement('script');
           script.src = '/sites/scripts/main/friendSearchPopupMain.js';
           script.type = 'module';

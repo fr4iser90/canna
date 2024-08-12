@@ -1,25 +1,17 @@
-import { fetchWithAuth } from "../global.js";
+import { configURL } from "../global.js";
+
 document.addEventListener("DOMContentLoaded", function () {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    console.error("No token found in localStorage");
-    return;
-  }
-
   // Profil laden
   async function loadProfile() {
     try {
-      const response = await fetchWithAuth(
-        "https://weedbackend.fr4iserhome.com/api/profile/profile",
+      const response = await fetch(
+        `${configURL.API_BASE_URL}/api/profile/profile`,
         {
-          // Endpunkt aktualisiert
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Beispiel für Authentifizierung
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -27,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const profile = await response.json();
-        // Weitere Verarbeitung des Profils
+      // Weitere Verarbeitung des Profils
     } catch (error) {
       console.error("Error loading profile:", error);
     }
@@ -48,23 +40,23 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       try {
-        const response = await fetchWithAuth(
-          "https://weedbackend.fr4iserhome.com/api/users/me",
+        const response = await fetch(
+          `${configURL.API_BASE_URL}/api/users/me`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(updatedProfile),
-          },
+          }
         );
+
         const data = await response.json();
         if (response.ok) {
-          alert("Profil erfolgreich aktualisiert");
+          alert("Profile updated successfully");
           loadProfile();
         } else {
-          alert("Fehler beim Aktualisieren des Profils: " + data.message);
+          alert("Error updating profile: " + data.message);
         }
       } catch (error) {
         console.error("Error updating profile:", error);
@@ -74,14 +66,15 @@ document.addEventListener("DOMContentLoaded", function () {
   // Freundesliste laden
   async function loadFriends() {
     try {
-      const response = await fetchWithAuth(
-        "https://weedbackend.fr4iserhome.com/api/friends",
+      const response = await fetch(
+        `${configURL.API_BASE_URL}/api/friends`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
-        },
+        }
       );
+
       const data = await response.json();
       if (response.ok) {
         const friendsList = document.getElementById("friendsList");
@@ -106,27 +99,28 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", async () => {
       const query = document.getElementById("searchInput").value;
       if (!query) {
-        alert("Bitte geben Sie einen Suchbegriff ein.");
+        alert("Please enter a search term.");
         return;
       }
 
       try {
-        const response = await fetchWithAuth(
-          `https://weedbackend.fr4iserhome.com/api/friends/search?query=${query}`,
+        const response = await fetch(
+          `${configURL.API_BASE_URL}/api/friends/search?query=${query}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
-          },
+          }
         );
+
         const data = await response.json();
         if (response.ok) {
           displaySearchResults(data);
         } else {
-          alert("Fehler bei der Suche: " + data.message);
+          alert("Search error: " + data.message);
         }
       } catch (error) {
-        console.error("Fehler bei der Benutzersuche:", error);
+        console.error("Error searching for users:", error);
       }
     });
 
@@ -140,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
       userDiv.className = "user-result";
       userDiv.textContent = `${user.username} (${user.email})`;
       const addButton = document.createElement("button");
-      addButton.textContent = "Freundschaftsanfrage senden";
+      addButton.textContent = "Send friend request";
       addButton.addEventListener("click", () => sendFriendRequest(user._id));
       userDiv.appendChild(addButton);
       resultsContainer.appendChild(userDiv);
@@ -150,25 +144,26 @@ document.addEventListener("DOMContentLoaded", function () {
   // Freundschaftsanfrage senden
   async function sendFriendRequest(toUserId) {
     try {
-      const response = await fetchWithAuth(
-        "https://weedbackend.fr4iserhome.com/api/friends/request",
+      const response = await fetch(
+        `${configURL.API_BASE_URL}/api/friends/request`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // JWT-Token aus dem lokalen Speicher
           },
           body: JSON.stringify({ toUserId }),
-        },
+        }
       );
+
       const data = await response.json();
-      if (!response.ok) {
+      if (response.ok) {
+        alert("Friend request sent");
+      } else {
         throw new Error("Error sending friend request: " + data.message);
       }
-        alert("Freundschaftsanfrage gesendet");
     } catch (error) {
-      console.error("Fehler beim Senden der Freundschaftsanfrage:", error);
-      alert("Fehler beim Senden der Freundschaftsanfrage: " + error.message);
+      console.error("Error sending friend request:", error);
+      alert("Error sending friend request: " + error.message);
     }
   }
 

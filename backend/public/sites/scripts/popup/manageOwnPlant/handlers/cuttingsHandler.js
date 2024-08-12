@@ -1,4 +1,4 @@
-import { fetchWithAuth, configURL } from "../../../global.js";
+import { configURL } from "../../../global.js";
 import { fetchOwnPlants } from "../../../plants/fetch/fetchOwnPlants.js";
 
 export function cuttingsHandler(plantId) {
@@ -7,7 +7,7 @@ export function cuttingsHandler(plantId) {
         const numberOfCuttings = document.getElementById("numberOfCuttings").value;
 
         try {
-            const response = await fetchWithAuth(`${configURL.API_BASE_URL}/api/ownPlants/cuttings`, {
+            const response = await fetch(`${configURL.API_BASE_URL}/api/ownPlants/cuttings`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export function cuttingsHandler(plantId) {
                 modal.style.display = 'block';
 
                 document.getElementById("stayInVegetationButton").addEventListener("click", async () => {
-                    const transitionResponse = await fetchWithAuth(`${configURL.API_BASE_URL}/api/ownPlants/transitionPhase`, {
+                    const transitionResponse = await fetch(`${configURL.API_BASE_URL}/api/ownPlants/transitionPhase`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -39,6 +39,7 @@ export function cuttingsHandler(plantId) {
                     });
 
                     if (transitionResponse.ok) {
+                        // Handle success
                     } else {
                         console.error("Error transitioning plant phase:", await transitionResponse.json());
                     }

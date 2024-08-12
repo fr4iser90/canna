@@ -1,5 +1,3 @@
-import { configURL } from "../../global.js";
-
 export async function handleForgotPassword(event) {
     event.preventDefault();
     const forgotPasswordForm = event.target;
@@ -7,7 +5,7 @@ export async function handleForgotPassword(event) {
     const email = formData.get("email");
 
     try {
-        const response = await fetch(`${configURL.API_BASE_URL}/api/users/forgot-password`, {
+        const response = await fetch(`/api/users/forgot-password`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),

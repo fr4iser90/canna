@@ -1,5 +1,3 @@
-import { fetchWithAuth } from "../../../global.js";
-
 export function archivePlantHandler(plantId) {
     document.getElementById("confirmArchiveButton").addEventListener("click", async () => {
         const yieldAmount = document.getElementById("archiveYield").value;
@@ -17,7 +15,7 @@ export function archivePlantHandler(plantId) {
         };
 
         try {
-            const response = await fetchWithAuth(`/api/ownPlants/archive/${plantId}`, {
+            const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -29,7 +27,6 @@ export function archivePlantHandler(plantId) {
                 throw new Error("Failed to archive plant");
             }
 
-            const result = await response.json();
             const plantElement = document.querySelector(`[data-plant-id="${plantId}"]`);
             if (plantElement) {
                 plantElement.remove();

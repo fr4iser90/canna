@@ -1,12 +1,16 @@
-import { fetchWithAuth } from "../global.js";
+import { configURL } from "../global.js";
 import { loadFriendsList } from "./loadFriendsList.js";
 
 export async function deleteFriend(friendId) {
   try {
-    const response = await fetchWithAuth(`/api/friends/${friendId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/friends/${friendId}`,
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+
     if (response.ok) {
       alert('Friend deleted!');
       loadFriendsList();

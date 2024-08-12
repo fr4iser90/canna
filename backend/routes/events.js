@@ -7,13 +7,27 @@ import { checkFriendship } from "../middleware/friendshipMiddleware.js";
 
 const router = express.Router();
 
+// Authentifizierung sicherstellen
 router.use(authenticateToken);
+// Verbindung zur Datenbank herstellen
 router.use(attachDbConnection("calendarDb"));
 
-router.get("/:userId/events", phaseMiddleware, checkFriendship, eventsController.getEvents);
-router.post("/:userId/events/:plantId", phaseMiddleware, eventsController.createEvent);
-router.put("/:userId/events/:id", eventsController.updateEvent);
-router.delete("/:userId/events/:plantId", eventsController.deleteEvent);
-router.get("/:userId/events/:plantId/check", eventsController.checkPlantEvents);
+// Route für eigene Events (der authentifizierte Benutzer)
+router.get("/events", phaseMiddleware, eventsController.getEvents);
+
+// Route zum Erstellen eines neuen Events für den authentifizierten Benutzer
+router.post("/events/:plantId", phaseMiddleware, eventsController.createEvent);
+
+// Route zum Aktualisieren eines Events für den authentifizierten Benutzer
+router.put("/events/:id", eventsController.updateEvent);
+
+// Route zum Löschen eines Events für den authentifizierten Benutzer
+router.delete("/events/:plantId", eventsController.deleteEvent);
+
+// Route zum Überprüfen, ob ein Event für eine bestimmte Pflanze existiert
+router.get("/events/:plantId/check", eventsController.checkPlantEvents);
+
+// Route für die Events eines Freundes, wobei die Freundschaft überprüft wird
+router.get("/friends/:friendId/events", checkFriendship, eventsController.getEvents);
 
 export default router;

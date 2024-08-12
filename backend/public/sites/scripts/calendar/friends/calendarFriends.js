@@ -1,15 +1,14 @@
-import { configURL, fetchWithAuth } from "../../global.js";
 import { updateEvent, deleteEvent, createEvent } from "../controllers/eventsController.js";
 
-async function fetchCalendars(userId, calendarSelect) {
+async function fetchCalendars(calendarSelect) {
   try {
-    let response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/calendars`,
-      {
-        method: "GET",
-      },
-    );
-    let calendars = await response.json();
+    const response = await fetch(`/api/calendars`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const calendars = await response.json();
+
     if (response.ok) {
       calendars.forEach((calendar) => {
         let option = document.createElement("option");
@@ -28,7 +27,6 @@ async function fetchCalendars(userId, calendarSelect) {
 
 async function loadCalendarEvents(calendarId) {
   const calendarEl = document.getElementById("calendar");
-  const token = getToken();
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "de",
@@ -37,13 +35,13 @@ async function loadCalendarEvents(calendarId) {
     droppable: true,
     events: async function (fetchInfo, successCallback, failureCallback) {
       try {
-        const response = await fetchWithAuth(
-          `${configURL.API_BASE_URL}/api/calendar/${calendarId}/events`,
-          {
-            method: "GET",
-          },
-        );
+        const response = await fetch(`/api/calendar/${calendarId}/events`, {
+          method: "GET",
+          credentials: "include",
+        });
+
         const data = await response.json();
+
         if (response.ok) {
           successCallback(data);
         } else {
@@ -56,14 +54,14 @@ async function loadCalendarEvents(calendarId) {
       }
     },
     eventDrop: async function (info) {
-      await updateEvent(info);
+      await updateEvent(calendarId, info);
     },
     eventResize: async function (info) {
-      await updateEvent(info);
+      await updateEvent(calendarId, info);
     },
     eventClick: async function (info) {
       if (confirm(`Möchten Sie das Event "${info.event.title}" löschen?`)) {
-        const success = await deleteEvent(info.event.id);
+        const success = await deleteEvent(calendarId, info.event.id);
         if (success) {
           info.event.remove();
         }
@@ -71,7 +69,7 @@ async function loadCalendarEvents(calendarId) {
     },
     drop: async function (info) {
       const eventTitle = "Neues Ereignis";
-      await createEvent(eventTitle, info.dateStr, calendarId);
+      await createEvent(calendarId, eventTitle, info.dateStr);
     },
   });
 
@@ -80,11 +78,10 @@ async function loadCalendarEvents(calendarId) {
 
 document.addEventListener("DOMContentLoaded", async function () {
   const calendarSelect = document.getElementById("calendarSelect");
-  const userId = localStorage.getItem("userId"); // Assuming userId is stored in localStorage
 
-  if (userId && calendarSelect) {
-    await fetchCalendars(userId, calendarSelect);
+  if (calendarSelect) {
+    await fetchCalendars(calendarSelect);
   } else {
-    console.error("User ID or calendar select element not found.");
+    console.error("Calendar select element not found.");
   }
 });

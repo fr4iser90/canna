@@ -1,4 +1,3 @@
-import { getUserId } from "../../global.js";
 import { showEventsOwnPlantPopup } from "../../popup/eventsOwnPlant/eventsOwnPlant.js";
 import { updateCalendar } from "../utils/updateCalendar.js";
 import { checkPlantEvents } from "../utils/checkPlantEvents.js";
@@ -7,7 +6,6 @@ import { updateOwnPlantsList } from "../../plants/update/updateOwnPlantsList.js"
 export async function initializeDragAndDrop(calendar) {
   const ownPlantsListContainer = document.getElementById("OwnPlantslist-Container");
   const calendarEl = document.getElementById("calendar");
-  const userId = getUserId();
 
   if (!ownPlantsListContainer) {
     console.error("Element mit ID OwnPlantslist-Container nicht gefunden");
@@ -86,7 +84,9 @@ export async function initializeDragAndDrop(calendar) {
     }
 
     const plantId = eventData.extendedProps.plantId;
-    const eventExists = await checkPlantEvents(userId, plantId);
+
+    // Server-seitige Logik statt userId-Abfragen im Frontend
+    const eventExists = await checkPlantEvents(plantId);
     console.log(eventExists);
     if (eventExists) {
       alert('Events for this plant already exist.');
@@ -95,8 +95,8 @@ export async function initializeDragAndDrop(calendar) {
 
     // Show the popup
     showEventsOwnPlantPopup(eventData, droppedDate, async (plantData) => {
-      // The event creation will now be handled in handleFormSubmission
-      updateCalendar(calendar, userId);
+      // Die Ereigniserstellung wird jetzt im Backend gehandhabt
+      await updateCalendar(calendar);
       await updateOwnPlantsList();
     });
   });

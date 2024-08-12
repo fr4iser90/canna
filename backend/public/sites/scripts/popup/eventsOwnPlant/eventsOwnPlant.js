@@ -1,18 +1,11 @@
 import { removeExistingPopup } from "../../utils/utils.js";
-import { getToken, fetchWithAuth } from "../../global.js";
+import { configURL } from "../../../global.js";
 import { initializePlantEventPopup } from "./initializePlantEventPopup.js";
-import { fetchOwnPlantsById } from "../../plants/fetch/fetchOwnPlants.js";
 import { fetchUserPreferences } from "../recordOwnPlant/fetchUserPreferences.js";
 
 export async function showEventsOwnPlantPopup(eventData, droppedDate, callback) {
   try {
-      const token = getToken();
-
-    const response = await fetchWithAuth(`/popup/plantEventPopup`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(`${configURL.API_BASE_URL}/popup/plantEventPopup`);
 
     if (!response.ok) {
       console.error("Network response was not ok. Status:", response.status);
@@ -30,10 +23,9 @@ export async function showEventsOwnPlantPopup(eventData, droppedDate, callback) 
     if (startDateInput) {
       const dateStr = droppedDate.toISOString().substring(0, 10); // Format as yyyy-mm-dd
       startDateInput.value = dateStr;
-      }
+    }
 
-      await fetchUserPreferences(popupContainer);
-  
+    await fetchUserPreferences(popupContainer);
   
     initializePlantEventPopup(popupContainer, eventData, droppedDate, callback);
   } catch (error) {

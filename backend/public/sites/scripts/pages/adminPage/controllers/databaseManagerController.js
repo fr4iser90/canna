@@ -1,16 +1,13 @@
-import { configURL, fetchWithAuth } from "../global.js";
+import { configURL } from "../global.js";
 
 async function fetchDatabases(dbDropdown, dbFeedback) {
   try {
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/admin/databases`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch databases");
@@ -39,15 +36,12 @@ async function fetchCollections(dbName, collectionDropdown, dbFeedback) {
     return;
   }
   try {
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch collections");
@@ -55,8 +49,7 @@ async function fetchCollections(dbName, collectionDropdown, dbFeedback) {
 
     const collections = await response.json();
 
-    collectionDropdown.innerHTML =
-      '<option value="">Select a collection</option>';
+    collectionDropdown.innerHTML = '<option value="">Select a collection</option>';
     collections.forEach((collection) => {
       const option = document.createElement("option");
       option.value = collection.name;
@@ -72,15 +65,12 @@ async function fetchCollections(dbName, collectionDropdown, dbFeedback) {
 async function dropDatabase(dbName, dbFeedback, fetchDatabases) {
   if (dbName && !["adminDb"].includes(dbName)) {
     try {
-      const response = await fetchWithAuth(
-        `${configURL.API_BASE_URL}/api/admin/databases/${dbName}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       const result = await response.json();
       dbFeedback.innerText = result.message;
@@ -97,15 +87,12 @@ async function dropDatabase(dbName, dbFeedback, fetchDatabases) {
 async function dropCollection(dbName, collectionName, dbFeedback, fetchCollections) {
   if (dbName && collectionName && !["adminDb"].includes(dbName)) {
     try {
-      const response = await fetchWithAuth(
-        `${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections/${collectionName}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const response = await fetch(`${configURL.API_BASE_URL}/api/admin/databases/${dbName}/collections/${collectionName}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       const result = await response.json();
       dbFeedback.innerText = result.message;
@@ -115,8 +102,7 @@ async function dropCollection(dbName, collectionName, dbFeedback, fetchCollectio
       dbFeedback.innerText = "Error dropping collection";
     }
   } else {
-    dbFeedback.innerText =
-      "Dropping collections in this database is not allowed";
+    dbFeedback.innerText = "Dropping collections in this database is not allowed";
   }
 }
 

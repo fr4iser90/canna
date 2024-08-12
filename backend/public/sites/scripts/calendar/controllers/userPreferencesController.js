@@ -1,17 +1,12 @@
-import { configURL, fetchWithAuth } from "../../global.js";
-
-// Fetch user preferences from the server
-export async function fetchUserPreferences(userId) {
+export async function fetchUserPreferences() {
   try {
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/preferences/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`/api/preferences`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -47,18 +42,16 @@ export async function fetchUserPreferences(userId) {
 }
 
 // Update user preferences on the server
-export async function updateUserPreferences(userId, preferences) {
+export async function updateUserPreferences(preferences) {
   try {
-    const response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/preferences/${userId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(preferences),
+    const response = await fetch(`/api/preferences`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(preferences),
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -73,8 +66,8 @@ export async function updateUserPreferences(userId, preferences) {
 }
 
 // Example function to display user preferences in a form
-export async function displayUserPreferences(userId) {
-  const preferences = await fetchUserPreferences(userId);
+export async function displayUserPreferences() {
+  const preferences = await fetchUserPreferences();
   if (!preferences) {
     console.error("No preferences found for user");
     return;
@@ -94,7 +87,6 @@ export async function displayUserPreferences(userId) {
 export async function handlePreferencesFormSubmit(event) {
   event.preventDefault();
 
-  const userId = getUserId(); // Assuming you have a function to get the current user ID
   const preferences = {
     germinationPhase: parseInt(
       document.getElementById("germinationPhase").value,
@@ -105,9 +97,10 @@ export async function handlePreferencesFormSubmit(event) {
     // Add more fields as necessary
   };
 
-  const updatedPreferences = await updateUserPreferences(userId, preferences);
+  const updatedPreferences = await updateUserPreferences(preferences);
   if (updatedPreferences) {
-    } else {
+    alert("Preferences updated successfully!");
+  } else {
     console.error("Failed to update preferences");
   }
 }

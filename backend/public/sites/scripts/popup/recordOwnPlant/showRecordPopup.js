@@ -1,9 +1,7 @@
-import { getToken } from "../../global.js";
 import { initializeRecordPopup } from "./initializeRecordPopup.js";
 
 export async function showRecordPopup(event, clickedDate) {
   try {
-    const token = getToken();
     const plantId = event.extendedProps.plantId;
 
     // Ensure clickedDate is a valid date object

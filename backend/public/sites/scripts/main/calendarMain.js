@@ -2,7 +2,6 @@ import { finalizeOwnPlantsContainer } from "../plants/finalize/finalizeOwnPlants
 import { fetchFriends } from "../common/friends.js";
 import { initializeFriendSearchPopup } from "./friendSearchPopupMain.js";
 import { initializeCalendar } from "../calendar/init/initializeCalendar.js";
-import { getUserId, checkTokenAndRedirect } from "../global.js";
 import { setupEventListeners } from "../calendar/listeners/listeners.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -13,14 +12,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   calendar.render();
 
-  await checkTokenAndRedirect();
-  const userId = getUserId();
-
   fetchFriends();
   await setupEventListeners();
   await searchFriendsButton();
-    // Kalender für den eingeloggten Benutzer initialisieren
-  await initializeCalendar(userId);
+  
+  // Kalender für den eingeloggten Benutzer initialisieren
+  await initializeCalendar(); // Keine Benutzer-ID erforderlich
   await finalizeOwnPlantsContainer();
 });
 
@@ -29,11 +26,9 @@ export async function searchFriendsButton() {
   if (searchFriendsButton) {
     searchFriendsButton.addEventListener("click", async () => {
       try {
-          const token = getToken();
-  
-          const response = await fetch("/popup/friendSearchPopup", {
+        const response = await fetch("/popup/friendSearchPopup", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         });
 
@@ -47,10 +42,10 @@ export async function searchFriendsButton() {
         const popupContainer = document.createElement("div");
         popupContainer.id = "popupContainer";
         popupContainer.innerHTML = html;
-          document.body.appendChild(popupContainer);
-          initializeFriendSearchPopup(); // Call the initialization function
-          
-        } catch (error) {
+        document.body.appendChild(popupContainer);
+        initializeFriendSearchPopup(); // Call the initialization function
+        
+      } catch (error) {
         console.error("Error loading friend search popup:", error);
         alert("Error loading friend search popup. Please try again.");
       }

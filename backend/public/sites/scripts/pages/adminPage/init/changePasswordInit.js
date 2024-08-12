@@ -1,4 +1,4 @@
-import { configURL, fetchWithAuth } from "../../../global.js";
+import { configURL } from "../../../global.js";
 
 export async function initializeChangePassword() {
   const changePasswordForm = document.getElementById("changePasswordForm");
@@ -11,16 +11,13 @@ export async function initializeChangePassword() {
       const newPassword = formData.get("newPassword");
 
       try {
-        const response = await fetchWithAuth(
-          `${configURL.API_BASE_URL}/api/users/changePassword`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ currentPassword, newPassword }),
+        const response = await fetch(`${configURL.API_BASE_URL}/api/users/changePassword`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({ currentPassword, newPassword }),
+        });
 
         if (response.ok) {
           alert("Password changed successfully");

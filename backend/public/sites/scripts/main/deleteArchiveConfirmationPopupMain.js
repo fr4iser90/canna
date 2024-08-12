@@ -1,5 +1,3 @@
-import { getToken, fetchWithAuth } from "../global.js";
-
 document.addEventListener("DOMContentLoaded", () => {
   
   const confirmDeleteButton = document.getElementById("confirmDeleteButton");
@@ -49,12 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     try {
-      const token = getToken();
       const response = await fetch(`/api/ownPlants/${plantId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -87,12 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const token = getToken();
       const response = await fetch(`/api/ownPlants/archive/${plantId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

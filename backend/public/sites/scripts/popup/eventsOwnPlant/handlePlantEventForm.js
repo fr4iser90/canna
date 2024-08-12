@@ -1,5 +1,5 @@
 import { updateOwnPlants } from "../../plants/update/updateOwnPlants.js";
-import { getUserId, formatDate } from "../../global.js";
+import { formatDate } from "../../global.js";
 import { createEvent } from "../../calendar/controllers/eventsController.js";
 
 export async function handlePlantEventForm(
@@ -8,7 +8,6 @@ export async function handlePlantEventForm(
   droppedDate,
   callback,
 ) {
-  const userId = getUserId();
   const plantTypeElement = document.getElementById("plantType");
   const startDateElement = document.getElementById("startDate");
   const germinationElement = document.getElementById("germinationPhase");
@@ -35,14 +34,13 @@ export async function handlePlantEventForm(
     }
   };
 
-    // Phase aktualisieren bevor die Events erstellt werden
+  // Phase aktualisieren bevor die Events erstellt werden
   const updatedPlant = await updateOwnPlants(eventData.extendedProps.plantId, plantData);
   if (!updatedPlant) {
     console.error("Failed to update plant phase");
     return;
   }
 
-  
   const newEvent = {
     title: eventData.title || "Default Title",
     start: formatDate(plantData.startDate || droppedDate),
@@ -50,36 +48,32 @@ export async function handlePlantEventForm(
     extendedProps: { ...eventData.extendedProps, ...plantData },
   };
 
-  
   try {
     const createdEvent = await createEvent(
-      userId,
       eventData.extendedProps.plantId,
       newEvent,
     );
-    if (createdEvent) {
-      } else {
+    if (!createdEvent) {
       console.error("Failed to create plant event.");
       alert("Error: Unknown error");
     }
   } catch (error) {
     console.error("Error handling plant event drop:", error);
     if (error.response) {
-        }
-
-    if (
-      error.response &&
-      error.response.status === 400 &&
-      error.response.data &&
-      error.response.data.message === "Events for this plant already exist"
-    ) {
-      alert("Pflanze schon im Kalender eingetragen");
-    } else if (
-      error.response &&
-      error.response.data &&
-      error.response.data.message
-    ) {
-      alert(`Error: ${error.response.data.message}`);
+      if (
+        error.response.status === 400 &&
+        error.response.data &&
+        error.response.data.message === "Events for this plant already exist"
+      ) {
+        alert("Pflanze schon im Kalender eingetragen");
+      } else if (
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert(`Error: ${error.message || "Unknown error"}`);
+      }
     } else {
       alert(`Error: ${error.message || "Unknown error"}`);
     }

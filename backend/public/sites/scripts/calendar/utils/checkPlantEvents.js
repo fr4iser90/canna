@@ -1,19 +1,20 @@
-import { fetchWithAuth,getUserId, getToken } from "../../global.js";
-
-export async function checkPlantEvents(userId, plantId) {
-    try {
-      const response = await fetchWithAuth(`/api/events//${userId}/events/${plantId}/check`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+export async function checkPlantEvents(plantId) {
+  try {
+    const response = await fetch(`/api/events/plant/${plantId}/check`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
-      const data = await response.json();
-      return data.eventExists;
-    } catch (error) {
-      console.error('Error checking plant events:', error);
-      return false;
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
+    const data = await response.json();
+    return data.eventExists;
+  } catch (error) {
+    console.error('Error checking plant events:', error);
+    return false;
   }
-  
+}

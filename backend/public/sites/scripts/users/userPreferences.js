@@ -1,51 +1,57 @@
-import { configURL, fetchWithAuth } from "../global.js";
+import { configURL } from "../global.js";
 
 export async function getUserPreferences() {
-  const token = localStorage.getItem("token"); // Ensure the token is retrieved here
-  const response = await fetchWithAuth(
-    `${configURL.API_BASE_URL}/api/preferences`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+  try {
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/preferences`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching user preferences:', error);
+    throw error;
   }
-
-  return response.json();
 }
 
 export async function updateUserPreferences(preferences) {
-  const token = localStorage.getItem("token"); // Ensure the token is retrieved here
-  const response = await fetchWithAuth(
-    `${configURL.API_BASE_URL}/api/preferences`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(preferences),
-    },
-  );
+  try {
+    const response = await fetch(
+      `${configURL.API_BASE_URL}/api/preferences`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(preferences),
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error updating user preferences:', error);
+    throw error;
   }
-
-  return response.json();
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("preferencesForm");
   const elements = form.elements;
 
-  // Load user preferences
+  // Benutzerpräferenzen laden
   try {
     const preferences = await getUserPreferences();
     for (const key in preferences) {
@@ -61,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error loading user preferences:", error);
   }
 
-  // Update user preferences
+  // Benutzerpräferenzen aktualisieren
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const updatedPreferences = {};

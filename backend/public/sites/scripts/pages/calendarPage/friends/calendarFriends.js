@@ -1,34 +1,35 @@
-import { configURL, fetchWithAuth } from "../../global.js";
+import { configURL } from "../../global.js";
 import { updateEvent, deleteEvent, createEvent } from "./events.js";
 
-async function fetchCalendars(userId, calendarSelect) {
+async function fetchCalendars(calendarSelect) {
   try {
-    let response = await fetchWithAuth(
-      `${configURL.API_BASE_URL}/api/calendars`,
-      {
-        method: "GET",
-      },
-    );
+    let response = await fetch(`${configURL.API_BASE_URL}/api/calendars`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Error fetching calendars");
+    }
+
     let calendars = await response.json();
-    if (response.ok) {
-      calendars.forEach((calendar) => {
-        let option = document.createElement("option");
-        option.value = calendar._id;
-        option.textContent = calendar.name;
-        calendarSelect.appendChild(option);
-      });
+    calendars.forEach((calendar) => {
+      let option = document.createElement("option");
+      option.value = calendar._id;
+      option.textContent = calendar.name;
+      calendarSelect.appendChild(option);
+    });
+
+    if (calendars.length > 0) {
       loadCalendarEvents(calendars[0]._id); // Load events for the first calendar by default
-    } else {
-      alert("Error fetching calendars: " + calendars.message);
     }
   } catch (error) {
     console.error("Error fetching calendars:", error);
+    alert("Error fetching calendars: " + error.message);
   }
 }
 
 async function loadCalendarEvents(calendarId) {
   const calendarEl = document.getElementById("calendar");
-  const token = getToken();
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "de",
@@ -37,21 +38,22 @@ async function loadCalendarEvents(calendarId) {
     droppable: true,
     events: async function (fetchInfo, successCallback, failureCallback) {
       try {
-        const response = await fetchWithAuth(
+        const response = await fetch(
           `${configURL.API_BASE_URL}/api/calendar/${calendarId}/events`,
           {
             method: "GET",
           },
         );
-        const data = await response.json();
-        if (response.ok) {
-          successCallback(data);
-        } else {
-          alert("Error: " + data.message);
+
+        if (!response.ok) {
+          throw new Error("Error fetching events");
         }
+
+        const data = await response.json();
+        successCallback(data);
       } catch (error) {
         console.error("Error fetching events:", error);
-        alert("Error fetching events");
+        alert("Error fetching events: " + error.message);
         failureCallback(error);
       }
     },
@@ -80,11 +82,10 @@ async function loadCalendarEvents(calendarId) {
 
 document.addEventListener("DOMContentLoaded", async function () {
   const calendarSelect = document.getElementById("calendarSelect");
-  const userId = localStorage.getItem("userId"); // Assuming userId is stored in localStorage
 
-  if (userId && calendarSelect) {
-    await fetchCalendars(userId, calendarSelect);
+  if (calendarSelect) {
+    await fetchCalendars(calendarSelect);
   } else {
-    console.error("User ID or calendar select element not found.");
+    console.error("Calendar select element not found.");
   }
 });

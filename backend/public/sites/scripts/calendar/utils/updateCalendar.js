@@ -1,12 +1,12 @@
 import { fetchEvents } from "../controllers/eventsController.js";
 
-export async function updateCalendar(calendar, userId) {
+export async function updateCalendar(calendar) {
   try {
-    const events = await fetchEvents(userId);
+    const events = await fetchEvents(); 
     calendar.removeAllEvents();
     calendar.addEventSource(events);
-      calendar.render();
-    } catch (error) {
+    calendar.render();
+  } catch (error) {
     console.error("Error updating calendar:", error);
   }
 }

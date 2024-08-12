@@ -22,7 +22,7 @@ export function setupDraggablePlants() {
             plantId: event.target.dataset.plantId,
           },
         };
-          event.dataTransfer.setData(
+        event.dataTransfer.setData(
           "application/json",
           JSON.stringify(eventData),
         );
