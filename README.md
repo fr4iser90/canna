@@ -1,2 +1,2 @@
-# Cannabis-Calendar
-Cannabis-Calendar-DB , see your plants with informations like strain , growtime, harvest etc. If we grow, and collect enough data, we can provide estimated yield etc. 
+# Plant-Calendar
+Plant-Tracker-DB – Keep track of your plants with information like strain, growth duration, harvest time, and more. As more data is collected, it can also be used to estimate potential yields.
